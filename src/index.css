@@ -1,0 +1,189 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f4f7fb;
+  color: #0a1f44;
+}
+
+:root {
+  --uw-blue: #0d6efd;
+  --uw-dark-blue: #0a3d91;
+  --uw-black: #0a1f44;
+  --uw-white: #ffffff;
+  --uw-gray: #f4f7fb;
+}
+/* ===== Shared table / button / modal styles ===== */
+.uw-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.uw-page-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0a1f44;
+  margin: 0;
+}
+.uw-page-title i { color: #0d6efd; margin-right: 8px; }
+
+.uw-btn-primary {
+  background: #0d6efd;
+  border: none;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.uw-btn-primary:hover { background: #0a3d91; }
+
+.uw-btn-secondary {
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  color: #0a1f44;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+.uw-btn-secondary:hover { background: #f1f5f9; }
+
+.uw-table-wrap {
+  background: #fff;
+  border-radius: 12px;
+  overflow: auto;
+  border: 1px solid #eaf0f9;
+  box-shadow: 0 2px 10px rgba(10,31,68,0.05);
+  max-height: 72vh;
+}
+
+.uw-excel-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+.uw-excel-table thead th {
+  background: #0a1f44;
+  color: #fff;
+  padding: 12px 14px;
+  text-align: left;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  white-space: nowrap;
+}
+.uw-excel-table tbody td {
+  padding: 10px 14px;
+  border-bottom: 1px solid #f0f4fa;
+  color: #2d3b55;
+  white-space: nowrap;
+}
+.uw-excel-table tbody tr:hover { background: #f7faff; }
+
+.uw-bold { font-weight: 600; color: #0a1f44; }
+
+.uw-badge {
+  background: #eaf1ff;
+  color: #0d6efd;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+.uw-badge.green { background: #e6f7ec; color: #198754; }
+.uw-badge.orange { background: #fff3e0; color: #fd7e14; }
+.uw-badge.red { background: #ffe5e5; color: #dc3545; }
+
+.uw-inline-input {
+  width: 80px;
+  padding: 5px 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #f9fbff;
+  font-size: 0.85rem;
+  color: #0a1f44;
+}
+.uw-inline-input:focus {
+  outline: none;
+  border-color: #0d6efd;
+  background: #fff;
+}
+
+.uw-icon-btn {
+  border: none;
+  padding: 6px 9px;
+  border-radius: 7px;
+  font-size: 0.85rem;
+  margin-right: 4px;
+}
+.uw-icon-btn.blue { background: #eaf1ff; color: #0d6efd; }
+.uw-icon-btn.blue:hover { background: #0d6efd; color: #fff; }
+.uw-icon-btn.red { background: #ffe5e5; color: #dc3545; }
+.uw-icon-btn.red:hover { background: #dc3545; color: #fff; }
+.uw-icon-btn.green { background: #e6f7ec; color: #198754; }
+.uw-icon-btn.green:hover { background: #198754; color: #fff; }
+
+.uw-no-data { text-align: center; color: #8898aa; padding: 30px; }
+
+.uw-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10,31,68,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 16px;
+}
+.uw-modal {
+  background: #fff;
+  border-radius: 14px;
+  width: 100%;
+  max-width: 720px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.uw-modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 22px;
+  border-bottom: 1px solid #eaf0f9;
+}
+.uw-modal-head h4 { margin: 0; color: #0a1f44; font-weight: 700; }
+.uw-modal-head button {
+  background: transparent;
+  border: none;
+  font-size: 1.1rem;
+  color: #6c7a92;
+}
+.uw-modal-body { padding: 22px; }
+.uw-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 640px) { .uw-form-grid { grid-template-columns: 1fr; } }
+.uw-form-grid label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #0a1f44;
+  margin-bottom: 4px;
+  display: block;
+}
+.uw-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 22px;
+}

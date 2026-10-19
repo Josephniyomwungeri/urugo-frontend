@@ -1,0 +1,138 @@
+.uw-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 31, 68, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 16px;
+}
+
+.uw-login-modal {
+  background: #fff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 420px;
+  padding: 30px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  animation: uw-login-in 0.25s ease;
+}
+
+@keyframes uw-login-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.uw-login-header { text-align: center; margin-bottom: 22px; }
+.uw-login-header i { font-size: 2.6rem; color: #0d6efd; }
+.uw-login-header h3 { color: #0a1f44; margin: 10px 0 4px; font-weight: 700; }
+.uw-login-header p { color: #6c7a92; font-size: 0.9rem; margin: 0; }
+
+.uw-login-form { display: flex; flex-direction: column; gap: 16px; }
+
+.uw-input-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #0a1f44;
+  margin-bottom: 6px;
+  display: block;
+}
+.uw-input-group label i { margin-right: 6px; color: #0d6efd; }
+
+/* PIN with eye toggle */
+.uw-pin-wrap {
+  position: relative;
+}
+.uw-pin-wrap input {
+  padding-right: 44px;
+}
+.uw-pin-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #6c7a92;
+  font-size: 1.05rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+.uw-pin-toggle:hover {
+  color: #0d6efd;
+  background: #eaf1ff;
+}
+
+/* Remember me row */
+.uw-remember-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: -4px;
+}
+.uw-remember-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: #0a1f44;
+  user-select: none;
+}
+.uw-remember-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #0d6efd;
+  cursor: pointer;
+}
+.uw-forget-btn {
+  background: transparent;
+  border: none;
+  color: #dc3545;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+.uw-forget-btn:hover {
+  background: #ffe5e5;
+}
+
+/* Buttons */
+.uw-btn-primary {
+  background: #0d6efd;
+  border: none;
+  color: #fff;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.uw-btn-primary:hover { background: #0a3d91; }
+.uw-btn-primary:disabled {
+  background: #7fb2ff;
+  cursor: not-allowed;
+}
+
+.uw-btn-secondary {
+  background: transparent;
+  border: 1px solid #cbd5e1;
+  color: #0a1f44;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.uw-btn-secondary:hover { background: #f1f5f9; }

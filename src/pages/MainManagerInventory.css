@@ -1,0 +1,11 @@
+.uw-mmi { padding: 4px; }
+
+.uw-mmi-low-badge {
+  background: #ffe5e5;
+  color: #dc3545;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+.uw-mmi-low-badge i { margin-right: 6px; }

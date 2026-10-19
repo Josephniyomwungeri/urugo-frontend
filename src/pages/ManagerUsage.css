@@ -1,0 +1,221 @@
+.uw-mu { padding: 4px; }
+
+/* ============ KPI CARDS ============ */
+.uw-mu-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.uw-mu-stat {
+  background: #fff;
+  border-radius: 12px;
+  padding: 18px;
+  border: 1px solid #eaf0f9;
+  box-shadow: 0 2px 8px rgba(10, 31, 68, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.uw-mu-stat i {
+  font-size: 1.8rem;
+  color: #0d6efd;
+  background: #eaf1ff;
+  padding: 12px;
+  border-radius: 10px;
+}
+.uw-mu-stat span {
+  display: block;
+  font-size: 0.82rem;
+  color: #6c7a92;
+}
+.uw-mu-stat strong {
+  font-size: 1.5rem;
+  color: #0a1f44;
+  font-weight: 800;
+}
+
+/* ============ DEPARTMENT BREAKDOWN ============ */
+.uw-mu-dept-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.uw-mu-dept-card {
+  background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+  border: 1px solid #e5ecf6;
+  border-radius: 12px;
+  padding: 14px 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.uw-mu-dept-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(13, 110, 253, 0.1);
+  border-color: #0d6efd;
+}
+
+.uw-mu-dept-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0a1f44;
+  margin-bottom: 8px;
+}
+.uw-mu-dept-title i {
+  color: #0d6efd;
+}
+
+.uw-mu-dept-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.82rem;
+  color: #4a5568;
+}
+.uw-mu-dept-row strong {
+  color: #0a1f44;
+}
+
+/* ============ HISTORY STYLES (shared with other modals) ============ */
+.uw-history {
+  background: #f9fbff;
+  border-radius: 10px;
+  padding: 12px;
+  border: 1px solid #e5ecf6;
+}
+.uw-history-item {
+  padding: 8px 0;
+  border-bottom: 1px dashed #e5ecf6;
+}
+.uw-history-item:last-child {
+  border-bottom: none;
+}
+.uw-history-title {
+  font-weight: 600;
+  color: #0a1f44;
+  font-size: 0.88rem;
+}
+.uw-history-comment {
+  color: #4a5568;
+  font-size: 0.85rem;
+  margin-top: 4px;
+  font-style: italic;
+}
+.uw-history-time {
+  color: #8898aa;
+  font-size: 0.75rem;
+  margin-top: 2px;
+}
+
+/* ============ PURPLE BADGES / ICON BUTTONS (shared) ============ */
+.uw-badge.purple {
+  background: #f0e9ff;
+  color: #6f42c1;
+}
+.uw-icon-btn.purple {
+  background: #f0e9ff;
+  color: #6f42c1;
+}
+.uw-icon-btn.purple:hover {
+  background: #6f42c1;
+  color: #fff;
+}
+.uw-mu { padding: 4px; }
+
+/* ============ KPI CARDS ============ */
+.uw-mu-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.uw-mu-stat {
+  background: #fff;
+  border-radius: 12px;
+  padding: 18px;
+  border: 1px solid #eaf0f9;
+  box-shadow: 0 2px 8px rgba(10, 31, 68, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.uw-mu-stat i {
+  font-size: 1.8rem;
+  color: #0d6efd;
+  background: #eaf1ff;
+  padding: 12px;
+  border-radius: 10px;
+}
+.uw-mu-stat span {
+  display: block;
+  font-size: 0.82rem;
+  color: #6c7a92;
+}
+.uw-mu-stat strong {
+  font-size: 1.5rem;
+  color: #0a1f44;
+  font-weight: 800;
+}
+
+/* Damaged KPI card — red accent */
+.uw-mu-stat-danger i {
+  color: #dc3545;
+  background: #ffe5e5;
+}
+.uw-mu-stat-danger strong {
+  color: #dc3545;
+}
+
+/* ============ DEPARTMENT BREAKDOWN ============ */
+.uw-mu-dept-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.uw-mu-dept-card {
+  background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+  border: 1px solid #e5ecf6;
+  border-radius: 12px;
+  padding: 14px 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.uw-mu-dept-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(13, 110, 253, 0.1);
+  border-color: #0d6efd;
+}
+
+.uw-mu-dept-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0a1f44;
+  margin-bottom: 8px;
+}
+.uw-mu-dept-title i {
+  color: #0d6efd;
+}
+
+.uw-mu-dept-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.82rem;
+  color: #4a5568;
+}
+.uw-mu-dept-row strong {
+  color: #0a1f44;
+}
+.uw-mu-dept-row .damaged strong {
+  color: #dc3545;
+}

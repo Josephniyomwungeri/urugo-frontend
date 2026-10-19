@@ -1,0 +1,96 @@
+.uw-mmh { padding: 4px; }
+
+.uw-mmh-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.uw-mmh-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 20px;
+  border: 1px solid #eaf0f9;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.uw-mmh-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(10,31,68,0.1);
+}
+.uw-mmh-card i {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+.uw-mmh-card.purple i { color: #6f42c1; }
+.uw-mmh-card.blue i { color: #0d6efd; }
+.uw-mmh-card.green i { color: #198754; }
+.uw-mmh-card.red i { color: #dc3545; }
+.uw-mmh-card.orange i { color: #fd7e14; }
+.uw-mmh-card.teal i { color: #20c997; }
+
+.uw-mmh-value {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #0a1f44;
+}
+.uw-mmh-label {
+  font-size: 0.82rem;
+  color: #6c7a92;
+  margin-top: 4px;
+}
+
+.uw-mmh-section {
+  background: #fff;
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #eaf0f9;
+}
+.uw-mmh-section h5 {
+  color: #0a1f44;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.uw-mmh-section h5 i { color: #0d6efd; margin-right: 8px; }
+
+.uw-mmh-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.uw-mmh-section-head h5 { margin: 0; }
+
+/* Activity */
+.uw-activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.uw-activity-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #f9fbff;
+  border-radius: 10px;
+  border: 1px solid #e5ecf6;
+}
+.uw-activity-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  color: #fff;
+}
+.uw-activity-icon.stock_in { background: #198754; }
+.uw-activity-icon.stock_out { background: #fd7e14; }
+.uw-activity-icon.loss { background: #dc3545; }
+.uw-activity-title { font-weight: 700; color: #0a1f44; }
+.uw-activity-meta { font-size: 0.82rem; color: #6c7a92; }

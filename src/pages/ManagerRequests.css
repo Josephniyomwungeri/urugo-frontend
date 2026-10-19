@@ -1,0 +1,204 @@
+.uw-mr { padding: 4px; }
+
+.uw-filter-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.uw-filter-btn {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  color: #4a5568;
+  padding: 7px 14px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.uw-filter-btn:hover { background: #f4f7fb; }
+.uw-filter-btn.active {
+  background: #0d6efd;
+  color: #fff;
+  border-color: #0d6efd;
+}
+
+.uw-detail-row {
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f4fa;
+  font-size: 0.9rem;
+  color: #2d3b55;
+}
+.uw-detail-row strong { color: #0a1f44; display: inline-block; min-width: 120px; }
+/* Inline editing of received quantity */
+.uw-received-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  cursor: default;
+}
+.uw-received-cell.changed {
+  background: #fff3e0;
+  color: #fd7e14;
+  font-weight: 700;
+}
+.uw-received-cell[title]:not([title='']) {
+  cursor: pointer;
+}
+.uw-received-cell[title]:not([title='']):hover {
+  background: #eaf1ff;
+}
+.uw-edit-icon {
+  font-size: 0.7rem;
+  opacity: 0.5;
+  margin-left: 2px;
+}
+.uw-received-cell:hover .uw-edit-icon {
+  opacity: 1;
+}
+
+.uw-inline-edit {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Bigger row-height for the received column so the buttons fit */
+.uw-mr .uw-excel-table tbody td {
+  vertical-align: middle;
+}
+/* Blue badge for the "received" status */
+.uw-badge.blue {
+  background: #e0f2fe;
+  color: #0284c7;
+}
+
+/* Blue icon button */
+.uw-icon-btn.blue {
+  background: #e0f2fe;
+  color: #0284c7;
+}
+.uw-icon-btn.blue:hover {
+  background: #0284c7;
+  color: #fff;
+}
+
+/* Inline edit cell */
+.uw-received-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+.uw-received-cell.changed {
+  background: #fff3e0;
+  color: #fd7e14;
+  font-weight: 700;
+}
+.uw-received-cell[title]:not([title='']) {
+  cursor: pointer;
+}
+.uw-received-cell[title]:not([title='']):hover {
+  background: #eaf1ff;
+}
+.uw-edit-icon {
+  font-size: 0.7rem;
+  opacity: 0.5;
+}
+.uw-received-cell:hover .uw-edit-icon {
+  opacity: 1;
+}
+.uw-inline-edit {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+/* Search + department filter row */
+.uw-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.uw-search {
+  position: relative;
+  flex: 1;
+  max-width: 380px;
+}
+.uw-search i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8898aa;
+}
+.uw-search input {
+  padding-left: 36px;
+  border-radius: 10px;
+}
+.uw-dept-filter {
+  position: relative;
+  min-width: 220px;
+}
+.uw-dept-filter i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8898aa;
+  z-index: 2;
+  pointer-events: none;
+}
+.uw-dept-filter select {
+  padding-left: 36px;
+  border-radius: 10px;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236c7a92' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+  padding-right: 36px;
+}
+/* Toggle row for existing vs new product */
+.uw-toggle-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.uw-toggle-btn {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #4a5568;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.84rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+.uw-toggle-btn:hover { background: #f1f5f9; }
+.uw-toggle-btn.active {
+  background: #0d6efd;
+  color: #fff;
+  border-color: #0d6efd;
+}
+
+/* Orange icon button (Record as Inventory) */
+.uw-icon-btn.orange {
+  background: #fff3e0;
+  color: #fd7e14;
+}
+.uw-icon-btn.orange:hover {
+  background: #fd7e14;
+  color: #fff;
+}

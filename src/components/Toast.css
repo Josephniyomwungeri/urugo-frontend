@@ -1,0 +1,32 @@
+.uw-toast-container {
+  position: fixed;
+  top: 90px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.uw-toast {
+  min-width: 260px;
+  padding: 14px 18px;
+  border-radius: 10px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  animation: uw-slide-in 0.3s ease;
+  font-weight: 500;
+}
+
+.uw-toast-success { background: #198754; }
+.uw-toast-error { background: #dc3545; }
+.uw-toast-warning { background: #fd7e14; }
+.uw-toast-info { background: #0d6efd; }
+
+@keyframes uw-slide-in {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}

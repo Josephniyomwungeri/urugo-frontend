@@ -1,0 +1,13 @@
+.uw-staff-layout { min-height: 100vh; background: #f4f7fb; }
+.uw-staff-body { display: flex; }
+.uw-staff-main { flex: 1; padding: 24px; overflow-x: auto; }
+
+@media (max-width: 900px) {
+  .uw-sidebar {
+    position: fixed;
+    left: 0;
+    top: 62px;
+    z-index: 800;
+    height: calc(100vh - 62px);
+  }
+}

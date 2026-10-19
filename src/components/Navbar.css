@@ -1,0 +1,133 @@
+.uw-navbar {
+  background: #0a1f44;
+  color: #fff;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.uw-navbar-left,
+.uw-navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.uw-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+.uw-logo i {
+  color: #4d9bff;
+}
+
+.uw-menu-btn {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  display: none;
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 4px 10px;
+  transition: background 0.2s ease;
+}
+.uw-menu-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+@media (max-width: 900px) {
+  .uw-menu-btn {
+    display: block;
+  }
+}
+
+/* ============ REFRESH BUTTON ============ */
+.uw-refresh-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  color: #fff;
+  font-size: 1.15rem;
+  padding: 8px 11px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease;
+}
+.uw-refresh-btn:hover {
+  background: rgba(77, 155, 255, 0.25);
+  color: #4d9bff;
+  transform: translateY(-1px);
+}
+.uw-refresh-btn:active {
+  transform: scale(0.95);
+}
+.uw-refresh-btn.uw-refreshing {
+  color: #4d9bff;
+  pointer-events: none;
+}
+.uw-refresh-btn.uw-refreshing i {
+  animation: uw-spin 0.7s linear infinite;
+}
+
+@keyframes uw-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ============ USER CHIP ============ */
+.uw-user-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 6px 12px;
+  border-radius: 30px;
+}
+.uw-user-chip i {
+  font-size: 1.6rem;
+  color: #4d9bff;
+}
+.uw-user-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.uw-user-role {
+  font-size: 0.7rem;
+  color: #b8c7e0;
+}
+
+/* ============ LOGOUT ============ */
+.uw-logout-btn {
+  background: #dc3545;
+  border: none;
+  color: #fff;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.uw-logout-btn:hover {
+  background: #b02a37;
+  transform: translateY(-1px);
+}
+
+/* ============ MOBILE ============ */
+@media (max-width: 640px) {
+  .uw-user-chip > div {
+    display: none; /* hide name/role text, keep icon */
+  }
+  .uw-user-chip {
+    padding: 6px 8px;
+  }
+}

@@ -1,0 +1,248 @@
+.rf-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 31, 68, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2500;
+  padding: 16px;
+  animation: rf-fade 0.2s ease;
+}
+@keyframes rf-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.rf-modal {
+  background: #fff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 900px;
+  max-height: 94vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.4);
+  animation: rf-pop 0.25s ease;
+}
+@keyframes rf-pop {
+  from { opacity: 0; transform: scale(0.96) translateY(8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.rf-modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 22px;
+  border-bottom: 1px solid #eaf0f9;
+  flex-shrink: 0;
+}
+.rf-modal-head h4 {
+  margin: 0;
+  font-size: 1.05rem;
+  color: #0a1f44;
+  font-weight: 700;
+}
+.rf-modal-head h4 i { color: #0d6efd; margin-right: 6px; }
+.rf-modal-head button {
+  background: transparent;
+  border: none;
+  font-size: 1.1rem;
+  color: #6c7a92;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+.rf-modal-head button:hover { background: #f1f5f9; color: #dc3545; }
+
+.rf-modal-body {
+  padding: 24px;
+  overflow-y: auto;
+  background: #eef2f8;
+  flex: 1;
+}
+
+/* ============ PRINTABLE FORM ============ */
+.rf-wrapper {
+  background: #fff;
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 22px 26px;
+  border: 2px solid #0a1f44;
+  border-radius: 6px;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  color: #0a1f44;
+}
+
+.rf-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+.rf-logo {
+  height: 55px;
+  width: 55px;
+  object-fit: contain;
+}
+.rf-header-text h1 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #0a1f44;
+}
+.rf-header-text h2 {
+  margin: 3px 0 0;
+  font-size: 12px;
+  color: #333;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.rf-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  margin: 12px 0 6px;
+  color: #2d3b55;
+}
+.rf-meta strong { color: #0a1f44; }
+
+.rf-wrapper table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+.rf-wrapper th,
+.rf-wrapper td {
+  border: 1px solid #333;
+  padding: 8px 10px;
+  font-size: 12.5px;
+  text-align: left;
+}
+.rf-wrapper th {
+  background: #0a1f44;
+  color: #fff;
+  font-weight: 700;
+  text-align: center;
+}
+.rf-wrapper td { color: #2d3b55; }
+
+.rf-total-row td {
+  background: #f2f5fb;
+  font-weight: 700;
+}
+
+/* ============ SIGNATURES ============ */
+.rf-signatures {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 34px;
+  margin-top: 38px;
+  font-size: 12.5px;
+}
+.rf-sig-block {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.rf-sig-line {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.rf-sig-line .lbl {
+  font-weight: 700;
+  color: #0a1f44;
+  font-size: 12.5px;
+}
+.rf-sig-line .name {
+  color: #0d6efd;
+  font-weight: 700;
+  font-size: 13px;
+  min-height: 18px;
+}
+.rf-sig-line .dotted {
+  border-top: 1px dotted #333;
+  padding-top: 4px;
+  font-size: 11px;
+  color: #666;
+}
+
+.rf-footer {
+  text-align: center;
+  font-size: 10.5px;
+  margin-top: 26px;
+  padding-top: 10px;
+  border-top: 1px solid #ccc;
+  color: #666;
+}
+
+/* ============ MODAL ACTIONS ============ */
+.rf-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 14px 22px;
+  border-top: 1px solid #eaf0f9;
+  background: #fff;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.rf-btn-primary {
+  background: #0d6efd;
+  border: none;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.rf-btn-primary:hover { background: #0a3d91; }
+
+.rf-btn-secondary {
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  color: #0a1f44;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.rf-btn-secondary:hover { background: #f1f5f9; }
+
+/* ============ MOBILE ============ */
+@media (max-width: 640px) {
+  .rf-modal-body { padding: 12px; }
+  .rf-wrapper { padding: 14px; }
+  .rf-signatures { grid-template-columns: 1fr; }
+  .rf-header-text h1 { font-size: 12px; }
+  .rf-header-text h2 { font-size: 10px; }
+  .rf-modal-actions { justify-content: center; }
+}
+/* ============ SIGNATURES — date line ============ */
+.rf-sig-line .sigdate {
+  color: #333;
+  font-size: 11.5px;
+  margin-bottom: 2px;
+}
+.rf-wrapper td:nth-child(5) {
+  white-space: normal;
+  word-break: break-word;
+  max-width: 160px;
+}

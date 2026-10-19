@@ -1,0 +1,51 @@
+.uw-mmr { padding: 4px; }
+/* Reuses shared styles from ManagerRequests.css */
+.uw-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.uw-search {
+  position: relative;
+  flex: 1;
+  max-width: 380px;
+}
+.uw-search i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8898aa;
+}
+.uw-search input {
+  padding-left: 36px;
+  border-radius: 10px;
+}
+.uw-dept-filter {
+  position: relative;
+  min-width: 220px;
+}
+.uw-dept-filter i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8898aa;
+  z-index: 2;
+  pointer-events: none;
+}
+.uw-dept-filter select {
+  padding-left: 36px;
+  border-radius: 10px;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236c7a92' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+  padding-right: 36px;
+}
+.uw-badge.purple {
+  background: #f0e9ff;
+  color: #6f42c1;
+}

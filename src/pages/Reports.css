@@ -1,0 +1,734 @@
+.uw-rp { padding: 4px; }
+
+/* ============ HEADER ============ */
+.uw-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.uw-page-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0a1f44;
+  margin: 0;
+}
+.uw-page-title i { color: #0d6efd; margin-right: 8px; }
+
+.uw-header-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.uw-btn-primary {
+  background: #0d6efd;
+  border: none;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.uw-btn-primary:hover { background: #0a3d91; }
+.uw-btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.uw-btn-auto { background: #6f42c1; }
+.uw-btn-auto:hover { background: #4d2d8f; }
+
+.uw-btn-secondary {
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  color: #0a1f44;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.uw-btn-secondary:hover { background: #f1f5f9; }
+.uw-btn-secondary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ============ PERIOD SELECTOR ============ */
+.uw-period-tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  background: #fff;
+  border: 1px solid #eaf0f9;
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 10px rgba(10, 31, 68, 0.04);
+}
+.uw-period-label {
+  font-weight: 700;
+  color: #0a1f44;
+  font-size: 0.88rem;
+  margin-right: 4px;
+}
+.uw-period-btn {
+  background: #f4f7fb;
+  border: 1px solid #e5ecf6;
+  color: #4a5568;
+  padding: 7px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.82rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+.uw-period-btn:hover { background: #eaf1ff; color: #0d6efd; }
+.uw-period-btn.active {
+  background: #0d6efd;
+  color: #fff;
+  border-color: #0d6efd;
+}
+.uw-period-info {
+  margin-left: auto;
+  color: #6c7a92;
+  font-size: 0.78rem;
+  font-style: italic;
+}
+
+/* ============ SUMMARY CARDS ============ */
+.uw-report-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.uw-summary-card {
+  background: #fff;
+  border: 1px solid #e5ecf6;
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 2px 10px rgba(10, 31, 68, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.uw-summary-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(10, 31, 68, 0.08);
+}
+.uw-summary-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+.uw-summary-icon.blue   { background: #0d6efd; }
+.uw-summary-icon.green  { background: #198754; }
+.uw-summary-icon.orange { background: #fd7e14; }
+.uw-summary-icon.red    { background: #dc3545; }
+
+/* 🆕 Purple variant (for Stock Flow "Net Change" card if you want it) */
+.uw-summary-icon.purple { background: #6f42c1; }
+
+.uw-summary-label {
+  font-size: 0.72rem;
+  color: #6c7a92;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.uw-summary-value {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0a1f44;
+  line-height: 1.1;
+  margin-top: 2px;
+}
+
+/* ============ TABS ============ */
+.uw-report-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.uw-report-tab {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 18px;
+  color: #4a5568;
+  font-weight: 600;
+  font-size: 0.88rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.uw-report-tab:hover { background: #f4f7fb; }
+.uw-report-tab.active {
+  background: #0d6efd;
+  color: #fff;
+  border-color: #0d6efd;
+}
+.uw-tab-count {
+  background: rgba(0, 0, 0, 0.1);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+}
+.uw-report-tab.active .uw-tab-count {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* ============ TABLE ============ */
+.uw-table-wrap {
+  background: #fff;
+  border-radius: 12px;
+  overflow: auto;
+  border: 1px solid #eaf0f9;
+  box-shadow: 0 2px 10px rgba(10, 31, 68, 0.05);
+  max-height: 60vh;
+  margin-bottom: 20px;
+}
+
+.uw-excel-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.uw-excel-table thead th {
+  background: #0a1f44;
+  color: #fff;
+  padding: 12px 14px;
+  text-align: left;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  white-space: nowrap;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+.uw-excel-table thead th:last-child { border-right: none; }
+
+.uw-excel-table tbody td {
+  padding: 10px 14px;
+  border-bottom: 1px solid #f0f4fa;
+  border-right: 1px solid #f0f4fa;
+  color: #2d3b55;
+  white-space: nowrap;
+}
+.uw-excel-table tbody td:last-child { border-right: none; }
+
+.uw-excel-table tbody tr:nth-child(even) { background: #f9fbff; }
+.uw-excel-table tbody tr:hover { background: #eef5ff; }
+
+.uw-no-data {
+  text-align: center;
+  color: #8898aa;
+  padding: 30px;
+}
+
+.uw-loading {
+  padding: 40px;
+  text-align: center;
+  color: #6c7a92;
+  font-size: 0.95rem;
+}
+
+/* ============ SCHEDULES ============ */
+.uw-schedules {
+  background: #fff;
+  border: 1px solid #eaf0f9;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 20px;
+  box-shadow: 0 2px 10px rgba(10, 31, 68, 0.04);
+}
+.uw-schedules-title {
+  color: #0a1f44;
+  font-size: 1rem;
+  margin: 0 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.uw-schedules-title i { color: #6f42c1; }
+.uw-schedules-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.uw-schedule-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: #f9fbff;
+  border: 1px solid #e5ecf6;
+  border-radius: 10px;
+  font-size: 0.88rem;
+}
+.uw-schedule-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.uw-schedule-badge.daily   { background: #e0f2fe; color: #0284c7; }
+.uw-schedule-badge.monthly { background: #f0e9ff; color: #6f42c1; }
+.uw-schedule-badge.annual  { background: #e6f7ec; color: #198754; }
+
+/* 🆕 Weekly badge (used by Stock Flow) */
+.uw-schedule-badge.weekly  { background: #fff1e0; color: #c2410c; }
+
+.uw-schedule-time {
+  color: #0a1f44;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.uw-schedule-next {
+  color: #6c7a92;
+  font-size: 0.82rem;
+  margin-left: auto;
+}
+.uw-icon-btn {
+  border: none;
+  padding: 6px 9px;
+  border-radius: 7px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.uw-icon-btn.red { background: #ffe5e5; color: #dc3545; }
+.uw-icon-btn.red:hover { background: #dc3545; color: #fff; }
+
+/* ============ MODAL ============ */
+.uw-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 31, 68, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 16px;
+}
+.uw-modal {
+  background: #fff;
+  border-radius: 14px;
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: uw-rp-pop 0.25s ease;
+}
+@keyframes uw-rp-pop {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.uw-modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 22px;
+  border-bottom: 1px solid #eaf0f9;
+}
+.uw-modal-head h4 { margin: 0; color: #0a1f44; font-weight: 700; }
+.uw-modal-head h4 i { color: #6f42c1; margin-right: 8px; }
+.uw-modal-head button {
+  background: transparent;
+  border: none;
+  font-size: 1.1rem;
+  color: #6c7a92;
+  cursor: pointer;
+}
+.uw-modal-body { padding: 22px; }
+
+.uw-auto-q {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0a1f44;
+  margin-bottom: 16px;
+}
+.uw-auto-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.uw-auto-option {
+  background: #fff;
+  border: 2px solid #e5ecf6;
+  border-radius: 10px;
+  padding: 16px 12px;
+  color: #4a5568;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+.uw-auto-option i { font-size: 1.4rem; }
+.uw-auto-option:hover { border-color: #0d6efd; color: #0d6efd; }
+.uw-auto-option.active {
+  background: #eaf1ff;
+  border-color: #0d6efd;
+  color: #0d6efd;
+}
+.uw-auto-hint {
+  margin-top: 10px;
+  font-size: 0.82rem;
+  color: #6c7a92;
+}
+.uw-auto-confirm {
+  background: #f4f7fb;
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 0.9rem;
+  color: #2d3b55;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.uw-auto-confirm strong { color: #0a1f44; }
+
+.uw-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  color: #0a1f44;
+  background: #fff;
+}
+.form-control:focus {
+  outline: none;
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.12);
+}
+
+/* Hidden by default; only shown when printing */
+.uw-print-header,
+.uw-print-footer {
+  display: none;
+}
+
+/* =========================================================
+   🆕 STOCK FLOW SPECIFIC STYLES
+   ========================================================= */
+
+/* Net change color helpers (used in the table cells) */
+.uw-net-positive {
+  background: #dcfce7 !important;
+  color: #166534 !important;
+  font-weight: 700;
+}
+.uw-net-negative {
+  background: #fee2e2 !important;
+  color: #991b1b !important;
+  font-weight: 700;
+}
+
+/* Small badges used inside the stock flow table */
+.uw-badge.green  { background: #dcfce7; color: #166534; }
+.uw-badge.orange { background: #ffedd5; color: #c2410c; }
+.uw-badge.red    { background: #fee2e2; color: #991b1b; }
+
+/* Purple accent used on some headers */
+.uw-btn-primary.uw-btn-accent { background: #6f42c1; }
+.uw-btn-primary.uw-btn-accent:hover { background: #4d2d8f; }
+
+/* Optional small "flow" arrow between summary cards (visual only) */
+.uw-flow-arrow {
+  display: none;
+}
+@media (min-width: 900px) {
+  .uw-flow-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #8898aa;
+    font-size: 1rem;
+  }
+}
+
+/* =========================================================
+   PRINT STYLES
+   ========================================================= */
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 12mm 10mm 14mm 10mm;
+  }
+
+  html, body {
+    background: #fff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body > * { display: none !important; }
+  body > #root { display: block !important; }
+
+  #root > .uw-manager-layout,
+  #root > .uw-staff-layout,
+  #root > .uhome_home {
+    display: block !important;
+  }
+
+  .uw-no-print,
+  .uw-sidebar,
+  .uw-navbar,
+  .uw-manager-body > .uw-sidebar,
+  .uw-staff-body > .uw-sidebar,
+  .uw-header-actions,
+  .uw-report-tabs,
+  .uw-period-tabs,
+  .uw-menu-btn,
+  .uw-topbar,
+  .uw-user-chip,
+  .uw-logout-btn,
+  .uhome_demo-overlay,
+  .uhome_demo-modal,
+  .Toastify,
+  .uw-toast-container,
+  .uw-modal-overlay,
+  .uw-schedules {
+    display: none !important;
+  }
+
+  .uw-manager-main,
+  .uw-staff-main,
+  .uw-manager-body,
+  .uw-staff-body {
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  .uw-rp {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    background: #fff !important;
+  }
+
+  .uw-print-header {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #0a1f44;
+    margin-bottom: 14px;
+  }
+  .uw-print-title {
+    font-size: 15pt;
+    font-weight: 800;
+    color: #0a1f44;
+  }
+  .uw-print-subtitle {
+    font-size: 9pt;
+    color: #4a5568;
+  }
+  .uw-print-footer {
+    display: flex !important;
+    justify-content: space-between;
+    margin-top: 14px;
+    padding-top: 8px;
+    border-top: 1px solid #cbd5e1;
+    font-size: 8.5pt;
+    color: #6c7a92;
+  }
+
+  .uw-print-table-wrap,
+  .uw-table-wrap {
+    max-height: none !important;
+    overflow: visible !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    display: block !important;
+  }
+
+  .uw-print-table,
+  .uw-excel-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    table-layout: auto !important;
+    font-size: 8pt !important;
+    display: table !important;
+  }
+
+  .uw-print-table thead,
+  .uw-excel-table thead { display: table-header-group !important; }
+
+  .uw-print-table tbody,
+  .uw-excel-table tbody { display: table-row-group !important; }
+
+  .uw-print-table tr,
+  .uw-excel-table tr {
+    display: table-row !important;
+    page-break-inside: avoid;
+  }
+
+  .uw-print-table thead th,
+  .uw-excel-table thead th {
+    background: #000 !important;
+    color: #fff !important;
+    border: 1px solid #000 !important;
+    padding: 6px 8px !important;
+    font-size: 8pt !important;
+    font-weight: 700 !important;
+    text-align: left !important;
+    position: static !important;
+    white-space: normal !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    display: table-cell !important;
+  }
+
+  .uw-print-table tbody td,
+  .uw-excel-table tbody td {
+    border: 1px solid #666 !important;
+    padding: 5px 8px !important;
+    font-size: 8pt !important;
+    color: #000 !important;
+    white-space: normal !important;
+    word-break: break-word;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    display: table-cell !important;
+  }
+
+  .uw-print-table tbody tr:nth-child(even) td,
+  .uw-excel-table tbody tr:nth-child(even) td {
+    background: #f5f7fb !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+
+/* Purple icon button */
+.uw-icon-btn.purple {
+  background: #f0e9ff;
+  color: #6f42c1;
+}
+.uw-icon-btn.purple:hover {
+  background: #6f42c1;
+  color: #fff;
+}
+
+/* ============ DANGER MODAL (Delete confirmation) ============ */
+.uw-modal-danger {
+  max-width: 480px;
+}
+.uw-modal-head-danger {
+  background: #fff5f5;
+  border-bottom: 1px solid #ffd6d6;
+}
+.uw-modal-head-danger h4 {
+  color: #b02a37;
+}
+.uw-modal-head-danger h4 i {
+  color: #dc3545;
+}
+
+.uw-confirm-q {
+  font-size: 0.98rem;
+  color: #0a1f44;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+.uw-confirm-details {
+  background: #f9fbff;
+  border: 1px solid #e5ecf6;
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 0.9rem;
+  color: #2d3b55;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.uw-confirm-details strong {
+  color: #0a1f44;
+  margin-right: 6px;
+}
+.uw-confirm-warn {
+  margin-top: 12px;
+  font-size: 0.82rem;
+  color: #b02a37;
+  background: #fff5f5;
+  border: 1px solid #ffd6d6;
+  padding: 8px 12px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Danger button (Delete confirm) */
+.uw-btn-danger {
+  background: #dc3545;
+  border: none;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.uw-btn-danger:hover { background: #b02a37; }
+.uw-btn-danger:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* =========================================================
+   🆕 SPINNER (used by delete-confirm "Deleting…" state)
+   ========================================================= */
+.uw-spin {
+  animation: uw-spin-anim 1s linear infinite;
+  display: inline-block;
+}
+@keyframes uw-spin-anim {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}

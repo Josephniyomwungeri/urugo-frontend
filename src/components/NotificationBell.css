@@ -1,0 +1,85 @@
+.uw-notif-wrap { position: relative; }
+
+.uw-notif-btn {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1.3rem;
+  position: relative;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+.uw-notif-btn:hover { background: rgba(255,255,255,0.15); }
+
+.uw-notif-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #dc3545;
+  color: #fff;
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-weight: bold;
+}
+
+.uw-notif-panel {
+  position: absolute;
+  right: 0;
+  top: 48px;
+  width: 340px;
+  max-height: 420px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(10,31,68,0.18);
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.uw-notif-header {
+  padding: 12px 16px;
+  background: #0a3d91;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ✅ small "N new" pill in the header */
+.uw-notif-count {
+  background: rgba(255,255,255,0.2);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.uw-notif-list { max-height: 360px; overflow-y: auto; }
+
+.uw-notif-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid #eef2f8;
+  cursor: pointer;
+  transition: background 0.15s ease, opacity 0.2s ease;
+}
+.uw-notif-item:hover { background: #f6f9ff; }
+.uw-notif-item:focus { outline: 2px solid #0d6efd; outline-offset: -2px; }
+
+/* ✅ Unread: highlighted background + blue left border + bolder title */
+.uw-notif-unread {
+  background: #eaf1ff;
+  border-left: 3px solid #0d6efd;
+}
+.uw-notif-unread:hover { background: #dde8ff; }
+
+/* ✅ Read: faded, greyed out (but still visible — not deleted) */
+.uw-notif-read {
+  background: #fff;
+  opacity: 0.55;
+}
+.uw-notif-read:hover { opacity: 0.8; background: #f6f9ff; }
+
+.uw-notif-title { font-weight: 600; color: #0a1f44; font-size: 0.9rem; }
+.uw-notif-msg { color: #4a5568; font-size: 0.85rem; margin: 4px 0; }
+.uw-notif-time { color: #8898aa; font-size: 0.75rem; }
+.uw-notif-empty { padding: 20px; text-align: center; color: #8898aa; }

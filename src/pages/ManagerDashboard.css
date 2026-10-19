@@ -1,0 +1,63 @@
+.uw-manager-layout { min-height: 100vh; background: #f4f7fb; }
+
+.uw-manager-body { display: flex; }
+
+.uw-sidebar {
+  width: 240px;
+  background: #0a1f44;
+  min-height: calc(100vh - 62px);
+  transition: width 0.2s;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.uw-sidebar-closed { width: 0; }
+
+.uw-sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  color: #fff;
+}
+.uw-sidebar-user i { font-size: 2rem; color: #4d9bff; }
+.uw-sb-name { font-size: 0.9rem; font-weight: 600; }
+.uw-sb-role { font-size: 0.75rem; color: #b8c7e0; }
+
+.uw-sidebar-nav { display: flex; flex-direction: column; padding: 12px 0; }
+
+.uw-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 22px;
+  color: #c8d6ee;
+  text-decoration: none;
+  font-size: 0.92rem;
+  border-left: 4px solid transparent;
+  transition: all 0.15s;
+}
+.uw-nav-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
+.uw-nav-active {
+  background: rgba(13,110,253,0.15);
+  color: #fff;
+  border-left-color: #0d6efd;
+}
+.uw-nav-item i { font-size: 1.1rem; }
+
+.uw-manager-main {
+  flex: 1;
+  padding: 24px;
+  overflow-x: auto;
+}
+
+@media (max-width: 900px) {
+  .uw-sidebar {
+    position: fixed;
+    left: 0;
+    top: 62px;
+    z-index: 800;
+    height: calc(100vh - 62px);
+  }
+  .uw-sidebar-closed { width: 0; }
+}

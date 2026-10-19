@@ -1,0 +1,360 @@
+import React, { useEffect, useState, useRef } from 'react';
+import axios from 'axios';
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import { API_URL, useAuth } from '../context/AuthContext';
+import { useNotifications } from '../context/NotificationContext';
+import './Reports.css';
+
+const PERIODS = [
+  { key: 'daily',   label: 'Daily',   icon: 'bi-calendar-day'   },
+  { key: 'weekly',  label: 'Weekly',  icon: 'bi-calendar-week'  },
+  { key: 'monthly', label: 'Monthly', icon: 'bi-calendar-month' },
+  { key: 'annual',  label: 'Annual',  icon: 'bi-calendar-range' },
+];
+
+const periodLabel = (p) => p.charAt(0).toUpperCase() + p.slice(1);
+
+const formatPeriodDisplay = (key, period) => {
+  // key examples: '2025-01-15' (daily), '2025-W03' (weekly), '2025-01' (monthly), '2025' (annual)
+  if (!key) return '—';
+  try {
+    if (period === 'daily') {
+      const d = new Date(key);
+      if (!isNaN(d.getTime())) return d.toLocaleDateString();
+    }
+    if (period === 'monthly') {
+      const [y, m] = key.split('-');
+      const d = new Date(Number(y), Number(m) - 1, 1);
+      if (!isNaN(d.getTime())) {
+        return d.toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
+      }
+    }
+    if (period === 'annual') return key;
+  } catch { /* fall through */ }
+  return key;
+};
+
+export default function StockFlow() {
+  const { user } = useAuth();
+  const { showToast } = useNotifications();
+
+  const [period, setPeriod] = useState('daily');
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [exporting, setExporting] = useState(false);
+
+  const load = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.get(`${API_URL}/reports/stock-flow`, {
+        params: { period },
+      });
+      setData(res.data);
+    } catch (err) {
+      showToast(err.response?.data?.error || 'Failed to load stock flow', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    load();
+  }, [period]);
+
+  useEffect(() => {
+    const handler = () => load();
+    window.addEventListener('uw:refresh', handler);
+    return () => window.removeEventListener('uw:refresh', handler);
+  }, [period]);
+
+  const buildFilename = (ext) => {
+    const now = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    const stamp =
+      `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}` +
+      `_${pad(now.getHours())}-${pad(now.getMinutes())}`;
+    const userPart = (user?.full_name || 'User').replace(/\s+/g, '_');
+    return `StockFlow_${periodLabel(period)}_${userPart}_${stamp}.${ext}`;
+  };
+
+  const downloadBlob = (blob, filename) => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1500);
+  };
+
+  /* ============ EXCEL EXPORT ============ */
+  const exportExcel = () => {
+    if (!data?.rows?.length) {
+      showToast('No data to export', 'warning');
+      return;
+    }
+    try {
+      const headers = ['Period', 'Stock In', 'Stock Out', 'Losses', 'Net Change'];
+      const rows = data.rows.map((r) => [
+        formatPeriodDisplay(r.period, period),
+        r.stockIn,
+        r.stockOut,
+        r.losses,
+        r.net,
+      ]);
+      rows.push([
+        'TOTAL',
+        data.totals.stockIn,
+        data.totals.stockOut,
+        data.totals.losses,
+        data.totals.net,
+      ]);
+
+      const aoa = [headers, ...rows];
+      const ws = XLSX.utils.aoa_to_sheet(aoa);
+      ws['!cols'] = [{ wch: 22 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 14 }];
+
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, `Stock Flow ${periodLabel(period)}`);
+
+      const fileName = buildFilename('xlsx');
+      const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+      const blob = new Blob([wbout], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
+      downloadBlob(blob, fileName);
+      showToast('Excel downloaded', 'success');
+    } catch (err) {
+      showToast('Excel export failed: ' + err.message, 'error');
+    }
+  };
+
+  /* ============ PDF EXPORT ============ */
+  const exportPDF = () => {
+    if (!data?.rows?.length) {
+      showToast('No data to export', 'warning');
+      return;
+    }
+    try {
+      setExporting(true);
+      const doc = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4' });
+
+      doc.setFontSize(18);
+      doc.setTextColor(10, 31, 68);
+      doc.setFont('helvetica', 'bold');
+      doc.text('URUGO WOMEN OPPORTUNITY CENTER, LLC', 40, 40);
+      doc.setFontSize(14);
+      doc.text(`Stock Flow — ${periodLabel(period)}`, 40, 62);
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10);
+      doc.setTextColor(90, 90, 90);
+      doc.text(`Generated by: ${user?.full_name || '—'} (${user?.role || ''})`, 40, 82);
+      doc.text(`Generated on: ${new Date().toLocaleString()}`, 40, 96);
+      doc.text(
+        `Range: ${data.startDate ? new Date(data.startDate).toLocaleDateString() : '—'} → ${new Date().toLocaleDateString()}`,
+        40, 110
+      );
+
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(10, 31, 68);
+      doc.text(
+        `Total Stock In: ${data.totals.stockIn}   |   Stock Out: ${data.totals.stockOut}   |   Losses: ${data.totals.losses}   |   Net: ${data.totals.net}`,
+        40, 128
+      );
+
+      autoTable(doc, {
+        head: [['Period', 'Stock In', 'Stock Out', 'Losses', 'Net Change']],
+        body: [
+          ...data.rows.map((r) => [
+            formatPeriodDisplay(r.period, period),
+            r.stockIn,
+            r.stockOut,
+            r.losses,
+            r.net,
+          ]),
+          ['TOTAL', data.totals.stockIn, data.totals.stockOut, data.totals.losses, data.totals.net],
+        ],
+        startY: 148,
+        styles: { fontSize: 9, cellPadding: 5 },
+        headStyles: { fillColor: [10, 31, 68], textColor: 255, fontStyle: 'bold' },
+        alternateRowStyles: { fillColor: [246, 248, 251] },
+        margin: { top: 148, left: 30, right: 30, bottom: 40 },
+        theme: 'grid',
+        didDrawPage: () => {
+          const pageSize = doc.internal.pageSize;
+          const pageHeight = pageSize.height || pageSize.getHeight();
+          doc.setFontSize(9);
+          doc.setTextColor(150);
+          doc.text(
+            `Urugo Woc Logistic System — Stock Flow — Page ${doc.internal.getCurrentPageInfo().pageNumber}`,
+            pageSize.width / 2,
+            pageHeight - 20,
+            { align: 'center' }
+          );
+        },
+      });
+
+      const fileName = buildFilename('pdf');
+      const pdfBlob = doc.output('blob');
+      downloadBlob(pdfBlob, fileName);
+      showToast('PDF downloaded', 'success');
+    } catch (err) {
+      showToast('PDF export failed: ' + err.message, 'error');
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  const printReport = () => window.print();
+
+  if (loading && !data) return <div className="uw-loading">Loading stock flow...</div>;
+
+  return (
+    <div className="uw-rp">
+      <div className="uw-page-header uw-no-print">
+        <h2 className="uw-page-title">
+          <i className="bi bi-graph-up-arrow"></i> Stock Flow
+        </h2>
+        <div className="uw-header-actions">
+          <button className="uw-btn-secondary" onClick={printReport}>
+            <i className="bi bi-printer"></i> Print
+          </button>
+          <button className="uw-btn-secondary" onClick={exportPDF} disabled={exporting}>
+            <i className="bi bi-file-earmark-pdf"></i> {exporting ? 'Generating…' : 'Export PDF'}
+          </button>
+          <button className="uw-btn-primary" onClick={exportExcel}>
+            <i className="bi bi-file-earmark-excel"></i> Export Excel
+          </button>
+        </div>
+      </div>
+
+      {/* Period tabs */}
+      <div className="uw-period-tabs uw-no-print">
+        <span className="uw-period-label">Group by:</span>
+        {PERIODS.map((p) => (
+          <button
+            key={p.key}
+            className={`uw-period-btn ${period === p.key ? 'active' : ''}`}
+            onClick={() => setPeriod(p.key)}
+          >
+            <i className={`bi ${p.icon}`}></i> {p.label}
+          </button>
+        ))}
+        {/* <span className="uw-period-info">
+          {data?.startDate
+            ? `From ${new Date(data.startDate).toLocaleDateString()} → today`
+            : ''}
+        </span> */}
+      </div>
+
+      {/* Summary cards */}
+      {data && (
+        <div className="uw-report-summary">
+          <div className="uw-summary-card">
+            <div className="uw-summary-icon green"><i className="bi bi-box-arrow-in-down"></i></div>
+            <div>
+              <div className="uw-summary-label">Stock In</div>
+              <div className="uw-summary-value">{data.totals.stockIn}</div>
+            </div>
+          </div>
+          <div className="uw-summary-card">
+            <div className="uw-summary-icon orange"><i className="bi bi-box-arrow-up"></i></div>
+            <div>
+              <div className="uw-summary-label">Stock Out</div>
+              <div className="uw-summary-value">{data.totals.stockOut}</div>
+            </div>
+          </div>
+          <div className="uw-summary-card">
+            <div className="uw-summary-icon red"><i className="bi bi-exclamation-triangle"></i></div>
+            <div>
+              <div className="uw-summary-label">Losses</div>
+              <div className="uw-summary-value">{data.totals.losses}</div>
+            </div>
+          </div>
+          <div className="uw-summary-card">
+            <div className="uw-summary-icon blue"><i className="bi bi-activity"></i></div>
+            <div>
+              <div className="uw-summary-label">Net Change</div>
+              <div
+                className="uw-summary-value"
+                style={{ color: data.totals.net >= 0 ? '#166534' : '#991b1b' }}
+              >
+                {data.totals.net >= 0 ? '+' : ''}{data.totals.net}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Print header */}
+      <div className="uw-print-header">
+        <div className="uw-print-title">Urugo Woc Logistics System</div>
+        <div className="uw-print-subtitle">
+          Stock Flow — {periodLabel(period)} — {new Date().toLocaleString()}
+        </div>
+      </div>
+
+      {/* Table */}
+      <div className="uw-table-wrap uw-print-table-wrap">
+        <table className="uw-excel-table uw-print-table">
+          <thead>
+            <tr>
+              <th>Period</th>
+              <th>Stock In</th>
+              <th>Stock Out</th>
+              <th>Losses</th>
+              <th>Net Change</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data?.rows?.map((r) => (
+              <tr key={r.period}>
+                <td className="uw-bold">{formatPeriodDisplay(r.period, period)}</td>
+                <td><span className="uw-badge green">{r.stockIn}</span></td>
+                <td><span className="uw-badge orange">{r.stockOut}</span></td>
+                <td><span className="uw-badge red">{r.losses}</span></td>
+                <td>
+                  <span
+                    className="uw-badge"
+                    style={{
+                      background: r.net >= 0 ? '#dcfce7' : '#fee2e2',
+                      color: r.net >= 0 ? '#166534' : '#991b1b',
+                      fontWeight: 700,
+                    }}
+                  >
+                    {r.net >= 0 ? '+' : ''}{r.net}
+                  </span>
+                </td>
+              </tr>
+            ))}
+            {(!data?.rows || data.rows.length === 0) && (
+              <tr>
+                <td colSpan="5" className="uw-no-data">No stock movement in this period</td>
+              </tr>
+            )}
+            {data?.rows?.length > 0 && (
+              <tr style={{ background: '#f1f5f9', fontWeight: 700 }}>
+                <td>TOTAL</td>
+                <td>{data.totals.stockIn}</td>
+                <td>{data.totals.stockOut}</td>
+                <td>{data.totals.losses}</td>
+                <td style={{ color: data.totals.net >= 0 ? '#166534' : '#991b1b' }}>
+                  {data.totals.net >= 0 ? '+' : ''}{data.totals.net}
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="uw-print-footer">
+        <span>Urugo Woc Logistics System — Confidential</span>
+        <span>{new Date().toLocaleDateString()}</span>
+      </div>
+    </div>
+  );
+}

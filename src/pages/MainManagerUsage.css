@@ -1,0 +1,60 @@
+.uw-mmu { padding: 4px; }
+.uw-mmu-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.uw-mmu-stat {
+  background: #fff;
+  border-radius: 12px;
+  padding: 18px;
+  border: 1px solid #eaf0f9;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.uw-mmu-stat i {
+  font-size: 1.8rem;
+  color: #0d6efd;
+  background: #eaf1ff;
+  padding: 12px;
+  border-radius: 10px;
+}
+.uw-mmu-stat span { display: block; font-size: 0.82rem; color: #6c7a92; }
+.uw-mmu-stat strong { font-size: 1.5rem; color: #0a1f44; font-weight: 800; }
+.uw-mmu { padding: 4px; }
+
+.uw-mmu-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.uw-mmu-stat {
+  background: #fff;
+  border-radius: 12px;
+  padding: 18px;
+  border: 1px solid #eaf0f9;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.uw-mmu-stat i {
+  font-size: 1.8rem;
+  color: #0d6efd;
+  background: #eaf1ff;
+  padding: 12px;
+  border-radius: 10px;
+}
+.uw-mmu-stat span { display: block; font-size: 0.82rem; color: #6c7a92; }
+.uw-mmu-stat strong { font-size: 1.5rem; color: #0a1f44; font-weight: 800; }
+
+/* Damaged KPI card — red accent */
+.uw-mmu-stat-danger i {
+  color: #dc3545;
+  background: #ffe5e5;
+}
+.uw-mmu-stat-danger strong {
+  color: #dc3545;
+}

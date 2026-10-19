@@ -1,0 +1,43 @@
+.uw-mm-layout { min-height: 100vh; background: #f4f7fb; }
+.uw-mm-body { display: flex; }
+.uw-mm-main { flex: 1; padding: 24px; overflow-x: auto; }
+
+/* Reuse sidebar styles from ManagerDashboard.css - or duplicate */
+.uw-mm-layout .uw-sidebar {
+  width: 240px;
+  background: #0a1f44;
+  min-height: calc(100vh - 62px);
+  transition: width 0.2s;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.uw-mm-layout .uw-sidebar-closed { width: 0; }
+.uw-mm-layout .uw-sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  color: #fff;
+}
+.uw-mm-layout .uw-sidebar-user i { font-size: 2rem; color: #ffc107; }
+.uw-mm-layout .uw-sb-name { font-size: 0.9rem; font-weight: 600; }
+.uw-mm-layout .uw-sb-role { font-size: 0.75rem; color: #b8c7e0; }
+.uw-mm-layout .uw-sidebar-nav { display: flex; flex-direction: column; padding: 12px 0; }
+.uw-mm-layout .uw-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 22px;
+  color: #c8d6ee;
+  text-decoration: none;
+  font-size: 0.92rem;
+  border-left: 4px solid transparent;
+  transition: all 0.15s;
+}
+.uw-mm-layout .uw-nav-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
+.uw-mm-layout .uw-nav-active {
+  background: rgba(255,193,7,0.15);
+  color: #fff;
+  border-left-color: #ffc107;
+}

@@ -1,0 +1,50 @@
+.uw-sm { padding: 4px; }
+.uw-pin {
+  background: #0a1f44;
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 1px;
+}
+.uw-pin-note {
+  background: #eaf1ff;
+  color: #0a3d91;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  margin-top: 14px;
+}
+.uw-pin-note i { margin-right: 6px; }
+.uw-sm { padding: 4px; }
+
+.uw-pin {
+  background: #0a1f44;
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 1px;
+}
+
+.uw-pin-note {
+  background: #eaf1ff;
+  color: #0a3d91;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  margin-top: 14px;
+}
+.uw-pin-note i {
+  margin-right: 6px;
+}
+
+/* Purple badge for main_manager */
+.uw-badge.purple {
+  background: #f0e9ff;
+  color: #6f42c1;
+}
