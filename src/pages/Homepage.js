@@ -3,9 +3,42 @@ import LoginModal from '../components/LoginModal';
 import RequisitionForm from '../components/RequisitionForm';
 import './Homepage.css';
 
+/* =========================================================
+   SCROLL REVEAL — fade-up animation on scroll
+   ========================================================= */
+function useScrollReveal() {
+  useEffect(() => {
+    const els = document.querySelectorAll('[data-reveal]');
+    if (!els.length) return;
+
+    // Fallback: if IntersectionObserver isn't supported, show everything
+    if (typeof IntersectionObserver === 'undefined') {
+      els.forEach((el) => el.classList.add('is-visible'));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target); // animate once
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: '0px 0px -60px 0px' }
+    );
+
+    els.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+}
+
 export default function Homepage() {
   const [showLogin, setShowLogin] = useState(false);
   const [showDemo, setShowDemo] = useState(false);
+
+  useScrollReveal();
 
   const features = [
     { icon: 'bi-box-arrow-in-down', title: 'Stock In', desc: 'Record donations & purchases with batch, expiry, supplier and QR/barcode.' },
@@ -133,26 +166,26 @@ export default function Homepage() {
       </section>
 
       {/* ============ PROBLEM ============ */}
-      <section className="uhome_section" id="uhome-features">
-        <h2 className="uhome_section-title uhome_anim-fade-up">The Problem To Be Solved</h2>
-        <p className="uhome_section-sub uhome_anim-fade-up">Manual processes cost time, money and trust</p>
+      <section className="uhome_section" id="uhome-features" data-reveal>
+        <h2 className="uhome_section-title">The Problem To Be Solved</h2>
+        <p className="uhome_section-sub">Manual processes cost time, money and trust</p>
         <div className="uhome_problem-grid">
-          <div className="uhome_problem-card uhome_anim-fade-up uhome_delay-1">
+          <div className="uhome_problem-card">
             <div className="uhome_problem-icon"><i className="bi bi-file-earmark-text"></i></div>
             <div className="uhome_problem-stat">60%</div>
             <p>of stock records kept on paper or Excel spreadsheets</p>
           </div>
-          <div className="uhome_problem-card uhome_anim-fade-up uhome_delay-2">
+          <div className="uhome_problem-card">
             <div className="uhome_problem-icon"><i className="bi bi-question-circle"></i></div>
             <div className="uhome_problem-stat">No trail</div>
             <p>on who received, moved or signed for materials</p>
           </div>
-          <div className="uhome_problem-card uhome_anim-fade-up uhome_delay-3">
+          <div className="uhome_problem-card">
             <div className="uhome_problem-icon"><i className="bi bi-graph-down-arrow"></i></div>
             <div className="uhome_problem-stat">Stock-outs</div>
             <p>and expired or damaged goods discovered too late</p>
           </div>
-          <div className="uhome_problem-card uhome_anim-fade-up uhome_delay-4">
+          <div className="uhome_problem-card">
             <div className="uhome_problem-icon"><i className="bi bi-clock-history"></i></div>
             <div className="uhome_problem-stat">Slow reports</div>
             <p>audit reports built by hand each month</p>
@@ -161,14 +194,14 @@ export default function Homepage() {
       </section>
 
       {/* ============ SOLUTION ============ */}
-      <section className="uhome_section uhome_section-alt">
-        <h2 className="uhome_section-title uhome_anim-fade-up">Invented Solution</h2>
-        <p className="uhome_section-sub uhome_anim-fade-up">
+      <section className="uhome_section uhome_section-alt" data-reveal>
+        <h2 className="uhome_section-title">Invented Solution</h2>
+        <p className="uhome_section-sub">
           One central platform that follows every item — from receipt to delivery
         </p>
         <div className="uhome_flow">
           {features.map((f, i) => (
-            <div className={`uhome_flow-item uhome_anim-zoom-in uhome_delay-${(i % 4) + 1}`} key={i}>
+            <div className="uhome_flow-item" key={i}>
               <div className="uhome_flow-icon"><i className={`bi ${f.icon}`}></i></div>
               <h4>{f.title}</h4>
               <p>{f.desc}</p>
@@ -178,14 +211,14 @@ export default function Homepage() {
       </section>
 
       {/* ============ HOW IT WORKS ============ */}
-      <section className="uhome_section">
-        <h2 className="uhome_section-title uhome_anim-fade-up">How It Works</h2>
-        <p className="uhome_section-sub uhome_anim-fade-up">
+      <section className="uhome_section" data-reveal>
+        <h2 className="uhome_section-title">How It Works</h2>
+        <p className="uhome_section-sub">
           A transparent request-to-requisition workflow with two-level approval
         </p>
         <div className="uhome_steps">
           {steps.map((s, i) => (
-            <div className={`uhome_step uhome_anim-fade-up uhome_delay-${(i % 4) + 1}`} key={s.num}>
+            <div className="uhome_step" key={s.num}>
               <div className="uhome_step-num">{s.num}</div>
               <div className="uhome_step-content">
                 <h4>{s.title}</h4>
@@ -197,14 +230,14 @@ export default function Homepage() {
       </section>
 
       {/* ============ STAFF REQUEST FLOW ============ */}
-      <section className="uhome_section uhome_section-alt">
-        <h2 className="uhome_section-title uhome_anim-fade-up">How Staff Request Products</h2>
-        <p className="uhome_section-sub uhome_anim-fade-up">
+      <section className="uhome_section uhome_section-alt" data-reveal>
+        <h2 className="uhome_section-title">How Staff Request Products</h2>
+        <p className="uhome_section-sub">
           A simple and transparent flow — from request to requisition form
         </p>
         <div className="uhome_staff-flow">
           {staffFlow.map((s, i) => (
-            <div className={`uhome_staff-card uhome_anim-fade-up uhome_delay-${(i % 3) + 1}`} key={i}>
+            <div className="uhome_staff-card" key={i}>
               <div className="uhome_staff-icon"><i className={`bi ${s.icon}`}></i></div>
               <h4>{s.title}</h4>
               <p>{s.desc}</p>
@@ -214,14 +247,14 @@ export default function Homepage() {
       </section>
 
       {/* ============ ROLES ============ */}
-      <section className="uhome_section">
-        <h2 className="uhome_section-title uhome_anim-fade-up">Built for Every Role</h2>
-        <p className="uhome_section-sub uhome_anim-fade-up">
+      <section className="uhome_section" data-reveal>
+        <h2 className="uhome_section-title">Built for Every Role</h2>
+        <p className="uhome_section-sub">
           Staff, Stock Manager and Main Manager — each with a tailored dashboard
         </p>
         <div className="uhome_roles-grid">
           {roles.map((r, i) => (
-            <div className={`uhome_role-card uhome_role-${r.color} uhome_anim-fade-up uhome_delay-${i + 1}`} key={i}>
+            <div className={`uhome_role-card uhome_role-${r.color}`} key={i}>
               <div className="uhome_role-icon"><i className={`bi ${r.icon}`}></i></div>
               <h3>{r.title}</h3>
               <ul>
@@ -233,12 +266,12 @@ export default function Homepage() {
       </section>
 
       {/* ============ MODULES ============ */}
-      <section className="uhome_section uhome_section-alt">
-        <h2 className="uhome_section-title uhome_anim-fade-up">Everything Included</h2>
-        <p className="uhome_section-sub uhome_anim-fade-up">Nine modules covering the full logistics cycle</p>
+      <section className="uhome_section uhome_section-alt" data-reveal>
+        <h2 className="uhome_section-title">Everything Included</h2>
+        <p className="uhome_section-sub">Nine modules covering the full logistics cycle</p>
         <div className="uhome_modules-grid">
           {modules.map((m, i) => (
-            <div className={`uhome_module-card uhome_anim-fade-up uhome_delay-${(i % 3) + 1}`} key={m.num}>
+            <div className="uhome_module-card" key={m.num}>
               <div className="uhome_module-num">{m.num}</div>
               <h4>{m.title}</h4>
               <p>{m.desc}</p>
@@ -248,19 +281,19 @@ export default function Homepage() {
       </section>
 
       {/* ============ IMPACT ============ */}
-      <section className="uhome_section">
-        <h2 className="uhome_section-title uhome_anim-fade-up">Expected Impact</h2>
-        <p className="uhome_section-sub uhome_anim-fade-up">Real benefits for NGO, staff</p>
+      <section className="uhome_section" data-reveal>
+        <h2 className="uhome_section-title">Expected Impact</h2>
+        <p className="uhome_section-sub">Real benefits for NGO, staff</p>
         <div className="uhome_impact-grid">
           {impacts.map((im, i) => (
-            <div className={`uhome_impact-card uhome_anim-zoom-in uhome_delay-${i + 1}`} key={i}>
+            <div className="uhome_impact-card" key={i}>
               <i className={`bi ${im.icon}`}></i>
               <h4>{im.title}</h4>
               <p>{im.desc}</p>
             </div>
           ))}
         </div>
-        <div className="uhome_cta-center uhome_anim-fade-up">
+        <div className="uhome_cta-center">
           <button className="uhome_cta-btn uhome_anim-pulse" onClick={() => setShowLogin(true)}>
             <i className="bi bi-rocket-takeoff-fill"></i> Get Started Now
           </button>
@@ -268,7 +301,7 @@ export default function Homepage() {
       </section>
 
       {/* ============ FOOTER ============ */}
-      <footer className="uhome_footer">
+      <footer className="uhome_footer" data-reveal>
         <div className="uhome_footer-grid">
           <div className="uhome_footer-brand">
             <div className="uhome_logo uhome_logo-footer">
@@ -359,7 +392,7 @@ function useVoiceNarrator(enabled) {
 }
 
 /* =========================================================
-   SCENES — now 4 tabs (usage merged into received)
+   SCENES — 4 tabs (usage merged into received)
    ========================================================= */
 const SCENES = {
   home: {

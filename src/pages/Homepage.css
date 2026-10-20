@@ -2002,3 +2002,96 @@
   padding: 5px 10px;
   border-radius: 6px;
 }
+/* =========================================================
+   SCROLL REVEAL — fade-up animation on scroll
+   ========================================================= */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Optional stagger for direct cards inside each revealed section */
+[data-reveal].is-visible .uhome_problem-card,
+[data-reveal].is-visible .uhome_flow-item,
+[data-reveal].is-visible .uhome_step,
+[data-reveal].is-visible .uhome_staff-card,
+[data-reveal].is-visible .uhome_role-card,
+[data-reveal].is-visible .uhome_module-card,
+[data-reveal].is-visible .uhome_impact-card {
+  animation: uhome_reveal-child 0.6s ease both;
+}
+
+[data-reveal].is-visible .uhome_problem-card:nth-child(1),
+[data-reveal].is-visible .uhome_flow-item:nth-child(1),
+[data-reveal].is-visible .uhome_step:nth-child(1),
+[data-reveal].is-visible .uhome_staff-card:nth-child(1),
+[data-reveal].is-visible .uhome_role-card:nth-child(1),
+[data-reveal].is-visible .uhome_module-card:nth-child(1),
+[data-reveal].is-visible .uhome_impact-card:nth-child(1) { animation-delay: 0.05s; }
+
+[data-reveal].is-visible .uhome_problem-card:nth-child(2),
+[data-reveal].is-visible .uhome_flow-item:nth-child(2),
+[data-reveal].is-visible .uhome_step:nth-child(2),
+[data-reveal].is-visible .uhome_staff-card:nth-child(2),
+[data-reveal].is-visible .uhome_role-card:nth-child(2),
+[data-reveal].is-visible .uhome_module-card:nth-child(2),
+[data-reveal].is-visible .uhome_impact-card:nth-child(2) { animation-delay: 0.12s; }
+
+[data-reveal].is-visible .uhome_problem-card:nth-child(3),
+[data-reveal].is-visible .uhome_flow-item:nth-child(3),
+[data-reveal].is-visible .uhome_step:nth-child(3),
+[data-reveal].is-visible .uhome_staff-card:nth-child(3),
+[data-reveal].is-visible .uhome_role-card:nth-child(3),
+[data-reveal].is-visible .uhome_module-card:nth-child(3),
+[data-reveal].is-visible .uhome_impact-card:nth-child(3) { animation-delay: 0.19s; }
+
+[data-reveal].is-visible .uhome_problem-card:nth-child(4),
+[data-reveal].is-visible .uhome_flow-item:nth-child(4),
+[data-reveal].is-visible .uhome_step:nth-child(4),
+[data-reveal].is-visible .uhome_staff-card:nth-child(4),
+[data-reveal].is-visible .uhome_module-card:nth-child(4),
+[data-reveal].is-visible .uhome_impact-card:nth-child(4) { animation-delay: 0.26s; }
+
+[data-reveal].is-visible .uhome_flow-item:nth-child(5),
+[data-reveal].is-visible .uhome_step:nth-child(5),
+[data-reveal].is-visible .uhome_staff-card:nth-child(5),
+[data-reveal].is-visible .uhome_module-card:nth-child(5) { animation-delay: 0.33s; }
+
+[data-reveal].is-visible .uhome_flow-item:nth-child(6),
+[data-reveal].is-visible .uhome_step:nth-child(6),
+[data-reveal].is-visible .uhome_staff-card:nth-child(6),
+[data-reveal].is-visible .uhome_module-card:nth-child(6) { animation-delay: 0.40s; }
+
+[data-reveal].is-visible .uhome_module-card:nth-child(7) { animation-delay: 0.47s; }
+[data-reveal].is-visible .uhome_module-card:nth-child(8) { animation-delay: 0.54s; }
+[data-reveal].is-visible .uhome_module-card:nth-child(9) { animation-delay: 0.61s; }
+
+@keyframes uhome_reveal-child {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  [data-reveal].is-visible .uhome_problem-card,
+  [data-reveal].is-visible .uhome_flow-item,
+  [data-reveal].is-visible .uhome_step,
+  [data-reveal].is-visible .uhome_staff-card,
+  [data-reveal].is-visible .uhome_role-card,
+  [data-reveal].is-visible .uhome_module-card,
+  [data-reveal].is-visible .uhome_impact-card {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}
