@@ -383,7 +383,7 @@ export default function Inventory() {
                 <input type="checkbox" checked={selectedIds.length > 0 && selectedIds.length === filtered.length} onChange={toggleSelectAll} />
               </th>
               <th>Image</th><th>Name</th><th>Category</th><th>Unit</th>
-              <th>Quantity</th><th>Unit Price</th><th>Batch</th><th>Expiry</th>
+              <th>Opening</th><th>Received</th><th>Quantity</th><th>Unit Price</th><th>Batch</th><th>Expiry</th>
               <th>Supplier</th><th>Min Stock</th><th>Actions</th>
             </tr>
           </thead>
@@ -407,10 +407,12 @@ export default function Inventory() {
                 <td className="uw-bold">{p.name}</td>
                 <td><span className="uw-badge">{p.category}</span></td>
                 <td>{p.unit}</td>
-                <td>
-                  <input type="number" className="uw-inline-input" defaultValue={p.quantity}
-                    onBlur={(e) => { const val = parseInt(e.target.value); if (val !== p.quantity) inlineUpdateQuantity(p.id, val); }} />
-                </td>
+               <td>{p.opening_stock ?? 0}</td>
+<td className="uw-bold" style={{ color: '#0a7c4a' }}>{p.received_stock ?? 0}</td>
+<td>
+  <input type="number" className="uw-inline-input" defaultValue={p.quantity}
+    onBlur={(e) => { const val = parseInt(e.target.value); if (val !== p.quantity) inlineUpdateQuantity(p.id, val); }} />
+</td>
                 <td>{p.unit_price} {p.currency}</td>
                 <td>{p.batch_number || '—'}</td>
                 <td>{p.expiry_date ? new Date(p.expiry_date).toLocaleDateString() : '—'}</td>
@@ -422,7 +424,7 @@ export default function Inventory() {
                 </td>
               </tr>
             ))}
-            {filtered.length === 0 && (<tr><td colSpan="12" className="uw-no-data">No products found</td></tr>)}
+            {filtered.length === 0 && (<tr><td colSpan="14" className="uw-no-data">No products found</td></tr>)}
           </tbody>
         </table>
       </div>
