@@ -29,6 +29,44 @@
 .uw-login-header h3 { color: #0a1f44; margin: 10px 0 4px; font-weight: 700; }
 .uw-login-header p { color: #6c7a92; font-size: 0.9rem; margin: 0; }
 
+/* NEW: Inline error banner */
+.uw-login-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: #fff4f4;
+  border: 1px solid #f5c2c7;
+  color: #842029;
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  font-size: 0.88rem;
+  line-height: 1.4;
+  animation: uw-error-in 0.2s ease;
+}
+.uw-login-error i {
+  color: #dc3545;
+  font-size: 1rem;
+  margin-top: 1px;
+  flex-shrink: 0;
+}
+.uw-login-error span { flex: 1; }
+
+@keyframes uw-error-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Spin utility (used on login button while loading) */
+.uw-spin {
+  display: inline-block;
+  animation: uw-spin-anim 0.9s linear infinite;
+}
+@keyframes uw-spin-anim {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
 .uw-login-form { display: flex; flex-direction: column; gap: 16px; }
 
 .uw-input-group label {

@@ -14,6 +14,9 @@ export default function LoginModal({ show, onClose }) {
   const [showPin, setShowPin] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // NEW: inline error state
+  const [errorMsg, setErrorMsg] = useState('');
+
   const { login } = useAuth();
   const { showToast } = useNotifications();
   const navigate = useNavigate();
@@ -21,6 +24,7 @@ export default function LoginModal({ show, onClose }) {
   // Auto-fill saved credentials when modal opens
   useEffect(() => {
     if (!show) return;
+    setErrorMsg('');
     try {
       const saved = localStorage.getItem(REMEMBER_KEY);
       if (saved) {
@@ -38,11 +42,21 @@ export default function LoginModal({ show, onClose }) {
     }
   }, [show]);
 
+  // Clear error when the user starts correcting their input
+  useEffect(() => {
+    if (errorMsg) setErrorMsg('');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [email, pin]);
+
   if (!show) return null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return;
+
     setLoading(true);
+    setErrorMsg('');
+
     try {
       const res = await axios.post(`${API_URL}/login`, { email, pin });
 
@@ -61,6 +75,7 @@ export default function LoginModal({ show, onClose }) {
       setEmail('');
       setPin('');
       setRemember(false);
+      setErrorMsg('');
       onClose();
 
       // 3. Navigate after a short delay to let auth state commit
@@ -72,7 +87,30 @@ export default function LoginModal({ show, onClose }) {
 
       setTimeout(() => navigate(target, { replace: true }), 50);
     } catch (err) {
-      showToast(err.response?.data?.error || 'Login failed', 'error');
+      // Friendly, actionable error messaging
+      const status = err.response?.status;
+      const serverMsg = err.response?.data?.error;
+
+      let message;
+      if (!err.response) {
+        // Network / server down
+        message =
+          'Unable to reach the server. Please check your internet connection or contact the Stock Manager.';
+      } else if (status === 401 || status === 400) {
+        // Wrong email or PIN
+        message =
+          'Invalid email or PIN. Please enter valid credentials or contact the Stock Manager for assistance.';
+      } else if (status >= 500) {
+        message =
+          'The server encountered an error. Please try again or contact the Stock Manager.';
+      } else {
+        message =
+          serverMsg ||
+          'Login failed. Please enter valid credentials or contact the Stock Manager.';
+      }
+
+      setErrorMsg(message);
+      showToast(message, 'error');
     } finally {
       setLoading(false);
     }
@@ -83,8 +121,11 @@ export default function LoginModal({ show, onClose }) {
     setEmail('');
     setPin('');
     setRemember(false);
+    setErrorMsg('');
     showToast('Saved credentials cleared', 'info');
   };
+
+  const canSubmit = !loading && email.trim() && pin.trim();
 
   return (
     <div className="uw-modal-overlay" onClick={onClose}>
@@ -94,6 +135,14 @@ export default function LoginModal({ show, onClose }) {
           <h3>Urugo Woc LS</h3>
           <p>Enter your email and PIN to continue</p>
         </div>
+
+        {/* NEW: Inline error banner */}
+        {errorMsg && (
+          <div className="uw-login-error" role="alert">
+            <i className="bi bi-exclamation-triangle-fill"></i>
+            <span>{errorMsg}</span>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="uw-login-form">
           <div className="uw-input-group">
@@ -157,9 +206,11 @@ export default function LoginModal({ show, onClose }) {
             )}
           </div>
 
-          <button className="uw-btn-primary" disabled={loading}>
+          <button className="uw-btn-primary" disabled={!canSubmit}>
             {loading ? (
-              'Logging in...'
+              <>
+                <i className="bi bi-arrow-repeat uw-spin"></i> Logging in...
+              </>
             ) : (
               <>
                 <i className="bi bi-box-arrow-in-right"></i> Login
