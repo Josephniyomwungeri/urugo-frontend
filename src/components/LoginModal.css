@@ -29,7 +29,7 @@
 .uw-login-header h3 { color: #0a1f44; margin: 10px 0 4px; font-weight: 700; }
 .uw-login-header p { color: #6c7a92; font-size: 0.9rem; margin: 0; }
 
-/* NEW: Inline error banner */
+/* Inline error banner */
 .uw-login-error {
   display: flex;
   align-items: flex-start;
@@ -57,7 +57,7 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Spin utility (used on login button while loading) */
+/* Spinner (used on login button while loading) */
 .uw-spin {
   display: inline-block;
   animation: uw-spin-anim 0.9s linear infinite;

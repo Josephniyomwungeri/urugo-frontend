@@ -14,7 +14,7 @@ export default function LoginModal({ show, onClose }) {
   const [showPin, setShowPin] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // NEW: inline error state
+  // Inline error message (shown as a banner inside the modal)
   const [errorMsg, setErrorMsg] = useState('');
 
   const { login } = useAuth();
@@ -38,14 +38,15 @@ export default function LoginModal({ show, onClose }) {
         setRemember(false);
       }
     } catch {
-      /* ignore */
+      /* ignore bad JSON */
     }
   }, [show]);
 
-  // Clear error when the user starts correcting their input
+  // Clear error whenever the user edits email or PIN.
+  // Uses functional updater so `errorMsg` is not read inside the effect
+  // (avoids the "missing dependency" lint warning entirely).
   useEffect(() => {
-    if (errorMsg) setErrorMsg('');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setErrorMsg((prev) => (prev ? '' : prev));
   }, [email, pin]);
 
   if (!show) return null;
@@ -67,7 +68,7 @@ export default function LoginModal({ show, onClose }) {
         localStorage.removeItem(REMEMBER_KEY);
       }
 
-      // 1. Update auth context first (triggers re-render of App.js)
+      // 1. Update auth context first (triggers re-render of App)
       login(res.data.user, res.data.token);
       showToast(`Welcome ${res.data.user.full_name}!`, 'success');
 
@@ -82,8 +83,8 @@ export default function LoginModal({ show, onClose }) {
       const role = res.data.user.role;
       const target =
         role === 'main_manager' ? '/main-manager' :
-        role === 'manager' ? '/manager' :
-        '/staff';
+        role === 'manager'      ? '/manager'      :
+                                  '/staff';
 
       setTimeout(() => navigate(target, { replace: true }), 50);
     } catch (err) {
@@ -136,7 +137,7 @@ export default function LoginModal({ show, onClose }) {
           <p>Enter your email and PIN to continue</p>
         </div>
 
-        {/* NEW: Inline error banner */}
+        {/* Inline error banner */}
         {errorMsg && (
           <div className="uw-login-error" role="alert">
             <i className="bi bi-exclamation-triangle-fill"></i>
@@ -218,11 +219,7 @@ export default function LoginModal({ show, onClose }) {
             )}
           </button>
 
-          <button
-            type="button"
-            className="uw-btn-secondary"
-            onClick={onClose}
-          >
+          <button type="button" className="uw-btn-secondary" onClick={onClose}>
             Cancel
           </button>
         </form>
