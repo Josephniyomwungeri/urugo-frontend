@@ -73,6 +73,40 @@ export default function StaffRequests() {
     };
   }, []);
 
+  // 🚀 Check for preselected items from the Product Catalog
+  useEffect(() => {
+    const stored = localStorage.getItem('uw_bulk_request_ids');
+    if (stored) {
+      try {
+        const ids = JSON.parse(stored);
+        if (Array.isArray(ids) && ids.length > 0) {
+          // Wait a moment for products to load, then build the forms
+          const timer = setTimeout(() => {
+            const selectedProducts = products.filter(p => ids.includes(p.id));
+            
+            if (selectedProducts.length > 0) {
+              const forms = selectedProducts.map(p => ({
+                ...emptyRequest,
+                product_id: p.id,
+                requested_unit: p.unit || 'pieces',
+                is_new_product: false,
+              }));
+              setBulkForms(forms);
+              setShowBulkModal(true);
+            }
+          }, 600); // Small delay to ensure the product list is fully populated
+          
+          return () => clearTimeout(timer);
+        }
+      } catch (err) {
+        console.error('Failed to parse selected IDs', err);
+      } finally {
+        // Clear it so it doesn't pop up again on refresh
+        localStorage.removeItem('uw_bulk_request_ids');
+      }
+    }
+  }, [products]); // Re-run when products array updates
+
   const openNewRequest = () => {
     setForm({
       ...emptyRequest,

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../context/AuthContext';
 import './StaffProducts.css';
 
@@ -7,6 +8,8 @@ export default function StaffProducts() {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('all');
+  const [selectedIds, setSelectedIds] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -30,6 +33,26 @@ export default function StaffProducts() {
     if (p.quantity <= 0) return { label: 'Out of stock', cls: 'out' };
     if (p.quantity <= p.min_stock) return { label: 'Low stock', cls: 'low' };
     return { label: 'In stock', cls: 'ok' };
+  };
+
+  // 🔄 Toggle product selection
+  const toggleSelect = (productId) => {
+    setSelectedIds((prev) =>
+      prev.includes(productId)
+        ? prev.filter((id) => id !== productId)
+        : [...prev, productId]
+    );
+  };
+
+  // 🚀 Send to StaffRequests with preselected items
+  const handleRequestSelected = () => {
+    if (selectedIds.length === 0) return;
+    
+    // Save the selected product IDs to localStorage so StaffRequests can read them
+    localStorage.setItem('uw_bulk_request_ids', JSON.stringify(selectedIds));
+    
+    // Navigate to the requests page
+    navigate('/staff/requests');
   };
 
   return (
@@ -93,9 +116,25 @@ export default function StaffProducts() {
             p.min_stock > 0
               ? Math.min(100, Math.round((p.quantity / (p.min_stock * 2)) * 100))
               : 100;
+          
+          const isSelected = selectedIds.includes(p.id);
+          const isOutOfStock = p.quantity <= 0;
 
           return (
-            <div className="uw-sp-card" key={p.id}>
+            <div className={`uw-sp-card ${isSelected ? 'selected' : ''}`} key={p.id}>
+              
+              {/* Checkbox for selection (only if in stock) */}
+              {!isOutOfStock && (
+                <label className="uw-sp-checkbox-wrap" title="Select for bulk request">
+                  <input
+                    type="checkbox"
+                    checked={isSelected}
+                    onChange={() => toggleSelect(p.id)}
+                  />
+                  <span className="uw-sp-checkmark"></span>
+                </label>
+              )}
+
               {/* Image */}
               <div className="uw-sp-card-img">
                 {p.image_url ? (
@@ -173,6 +212,19 @@ export default function StaffProducts() {
           </div>
         )}
       </div>
+
+      {/* 🚀 Floating Action Bar for Bulk Requests */}
+      {selectedIds.length > 0 && (
+        <div className="uw-sp-floating-bar">
+          <span>{selectedIds.length} product(s) selected</span>
+          <button className="uw-btn-primary" onClick={handleRequestSelected}>
+            <i className="bi bi-cart-plus"></i> Request Selected
+          </button>
+          <button className="uw-sp-clear-btn" onClick={() => setSelectedIds([])}>
+            Clear
+          </button>
+        </div>
+      )}
     </div>
   );
 }
