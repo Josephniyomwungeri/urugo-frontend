@@ -124,9 +124,6 @@ export default function Reports() {
   const [deletingSchedule, setDeletingSchedule] = useState(false);
   const [schedules, setSchedules] = useState([]);
   const folderRef = useRef(null);
-  
-  /* Share Dropdown State */
-  const [shareMenuOpen, setShareMenuOpen] = useState(null);
 
   /* Department Flow */
   const [dfPeriod, setDfPeriod] = useState('monthly');
@@ -222,22 +219,6 @@ export default function Reports() {
         saved_to_pc: savedToPc ? 1 : 0, payload: payload || null,
       });
     } catch {}
-  };
-
-  /* Share Logic */
-  const handleShare = (type, section) => {
-    setShareMenuOpen(null);
-    const currentUrl = window.location.href;
-    const shareText = `Check out this ${section} Report from Urugo Woc LS.`;
-    
-    if (type === 'whatsapp') {
-      window.open(`https://wa.me/?text=${encodeURIComponent(shareText + ' ' + currentUrl)}`, '_blank');
-    } else if (type === 'email') {
-      window.location.href = `mailto:?subject=${encodeURIComponent(section + ' Report')}&body=${encodeURIComponent(shareText + '\n\n' + currentUrl)}`;
-    } else if (type === 'copy') {
-      navigator.clipboard.writeText(currentUrl);
-      showToast('Link copied to clipboard', 'success');
-    }
   };
 
   /* TAB: Excel/PDF/Print */
@@ -921,32 +902,20 @@ export default function Reports() {
                 <button className="uw-btn-secondary" onClick={ocPrint}><i className="bi bi-printer"></i> Print</button>
                 <button className="uw-btn-secondary" onClick={ocExportPDF}><i className="bi bi-file-earmark-pdf"></i> PDF</button>
                 <button className="uw-btn-primary" onClick={ocExportExcel}><i className="bi bi-file-earmark-excel"></i> Excel</button>
-                
-                {/* Share Button */}
-                <div className="uw-share-wrap">
-                  <button className="uw-btn-secondary" onClick={() => setShareMenuOpen(shareMenuOpen === 'oc' ? null : 'oc')}>
-                    <i className="bi bi-share"></i>
-                  </button>
-                  {shareMenuOpen === 'oc' && (
-                    <div className="uw-share-menu">
-                      <button onClick={() => handleShare('whatsapp', 'Opening & Closing')}><i className="bi bi-whatsapp" style={{ color: '#25D366' }}></i> WhatsApp</button>
-                      <button onClick={() => handleShare('email', 'Opening & Closing')}><i className="bi bi-envelope" style={{ color: '#EA4335' }}></i> Email</button>
-                      <button onClick={() => handleShare('copy', 'Opening & Closing')}><i className="bi bi-link-45deg"></i> Copy Link</button>
-                    </div>
-                  )}
-                </div>
               </div>
 
               <div className="uw-table-wrap" style={{ maxHeight: 220, overflow: 'auto', marginTop: 8 }}>
                 <table className="uw-excel-table" style={{ fontSize: '0.75rem' }}>
                   <thead><tr>
                     <th>Product</th>
+                    <th>Unit Price</th>
                     <th>Opening</th><th>Received</th><th>In</th><th>Out</th><th>Closing</th>
                   </tr></thead>
                   <tbody>
                     {ocData.rows.map((r) => (
                       <tr key={r.product_id}>
                         <td className="uw-bold">{r.name}</td>
+                        <td>{Number(r.unit_price).toFixed(2)} {r.currency}</td>
                         <td>{r.opening_stock}</td>
                         <td style={{ color: '#0a7c4a', fontWeight: 'bold' }}>{r.received_stock}</td>
                         <td>{r.stock_in}</td><td>{r.stock_out}</td>
@@ -990,20 +959,6 @@ export default function Reports() {
                 <button className="uw-btn-secondary" onClick={dfPrint}><i className="bi bi-printer"></i> Print</button>
                 <button className="uw-btn-secondary" onClick={dfExportPDF}><i className="bi bi-file-earmark-pdf"></i> PDF</button>
                 <button className="uw-btn-primary" onClick={dfExportExcel}><i className="bi bi-file-earmark-excel"></i> Excel</button>
-                
-                {/* Share Button */}
-                <div className="uw-share-wrap">
-                  <button className="uw-btn-secondary" onClick={() => setShareMenuOpen(shareMenuOpen === 'df' ? null : 'df')}>
-                    <i className="bi bi-share"></i>
-                  </button>
-                  {shareMenuOpen === 'df' && (
-                    <div className="uw-share-menu">
-                      <button onClick={() => handleShare('whatsapp', 'Department Flow')}><i className="bi bi-whatsapp" style={{ color: '#25D366' }}></i> WhatsApp</button>
-                      <button onClick={() => handleShare('email', 'Department Flow')}><i className="bi bi-envelope" style={{ color: '#EA4335' }}></i> Email</button>
-                      <button onClick={() => handleShare('copy', 'Department Flow')}><i className="bi bi-link-45deg"></i> Copy Link</button>
-                    </div>
-                  )}
-                </div>
               </div>
 
               {dfData.rows.length > 0 && (
@@ -1057,20 +1012,6 @@ export default function Reports() {
                 <button className="uw-btn-secondary" onClick={prPrint}><i className="bi bi-printer"></i> Print</button>
                 <button className="uw-btn-secondary" onClick={prExportPDF}><i className="bi bi-file-earmark-pdf"></i> PDF</button>
                 <button className="uw-btn-primary" onClick={prExportExcel}><i className="bi bi-file-earmark-excel"></i> Excel</button>
-                
-                {/* Share Button */}
-                <div className="uw-share-wrap">
-                  <button className="uw-btn-secondary" onClick={() => setShareMenuOpen(shareMenuOpen === 'pr' ? null : 'pr')}>
-                    <i className="bi bi-share"></i>
-                  </button>
-                  {shareMenuOpen === 'pr' && (
-                    <div className="uw-share-menu">
-                      <button onClick={() => handleShare('whatsapp', 'Product')}><i className="bi bi-whatsapp" style={{ color: '#25D366' }}></i> WhatsApp</button>
-                      <button onClick={() => handleShare('email', 'Product')}><i className="bi bi-envelope" style={{ color: '#EA4335' }}></i> Email</button>
-                      <button onClick={() => handleShare('copy', 'Product')}><i className="bi bi-link-45deg"></i> Copy Link</button>
-                    </div>
-                  )}
-                </div>
               </div>
 
               {prData.rows.length > 0 && (
