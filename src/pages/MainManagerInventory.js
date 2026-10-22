@@ -69,8 +69,8 @@ export default function MainManagerInventory() {
                   <td>{p.id}</td>
                   <td>
                     {p.image_url ? (
-                      <img src={`http://localhost:5000${p.image_url}`} alt={p.name}
-                        style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 6 }} />
+                      <img src={p.image_url} alt={p.name}
+  style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 6 }} />
                     ) : (
                       <div style={{ width: 40, height: 40, background: '#f0f4fa', borderRadius: 6,
                         display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#8898aa' }}>
