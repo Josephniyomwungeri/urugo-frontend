@@ -29,7 +29,7 @@ export default function MainManagerHome() {
   return (
     <div className="uw-mmh">
       <h2 className="uw-page-title">
-        <i className="bi bi-shield-check"></i> Main Manager Overview
+        <i className="bi bi-shield-check"></i> Finance Manager Overview
       </h2>
 
       {/* KPI Cards */}

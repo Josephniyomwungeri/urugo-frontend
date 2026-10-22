@@ -40,7 +40,7 @@ export default function StaffManagement() {
       ? [
           { value: 'staff', label: 'Staff' },
           { value: 'manager', label: 'Stock Manager' },
-          { value: 'finance_manager', label: 'Main Manager' },
+          { value: 'finance_manager', label: 'Finance Manager' },
         ]
       : [
           { value: 'staff', label: 'Staff' },
@@ -82,9 +82,9 @@ export default function StaffManagement() {
   };
 
   const openEdit = (s) => {
-    // Defensive: Stock Manager cannot edit a Main Manager
+    // Defensive: Stock Manager cannot edit a Finance Manager
     if (user?.role !== 'finance_manager' && s.role === 'finance_manager') {
-      showToast('You cannot edit a Main Manager', 'error');
+      showToast('You cannot edit a Finance Manager', 'error');
       return;
     }
     setEditing(s);
@@ -110,9 +110,9 @@ export default function StaffManagement() {
   };
 
   const remove = async (id, role) => {
-    // Defensive: Stock Manager cannot delete a Main Manager
+    // Defensive: Stock Manager cannot delete a Finance Manager
     if (user?.role !== 'finance_manager' && role === 'finance_manager') {
-      showToast('You cannot delete a Main Manager', 'error');
+      showToast('You cannot delete a Finance Manager', 'error');
       return;
     }
     if (!window.confirm('Delete this staff member?')) return;
@@ -138,7 +138,7 @@ export default function StaffManagement() {
   };
 
   const roleLabel = (role) => {
-    if (role === 'finance_manager') return 'Main Manager';
+    if (role === 'finance_manager') return 'Finance Manager';
     if (role === 'manager') return 'Stock Manager';
     return 'Staff';
   };

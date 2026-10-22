@@ -34,7 +34,7 @@ export default function MainManagerDashboard() {
             <i className="bi bi-shield-check"></i>
             <div>
               <div className="uw-sb-name">{user?.full_name}</div>
-              <div className="uw-sb-role">Main Manager (Reviewer)</div>
+              <div className="uw-sb-role">Finance Manager</div>
             </div>
           </div>
           <nav className="uw-sidebar-nav">

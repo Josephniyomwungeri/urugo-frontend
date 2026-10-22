@@ -52,7 +52,7 @@ export default function Navbar({ onMenuClick }) {
             <div className="uw-user-name">{user?.full_name}</div>
             <div className="uw-user-role">
               {user?.role === 'finance_manager'
-                ? 'Main Manager'
+                ? 'Finance Manager'
                 : user?.role === 'manager'
                 ? 'Stock Manager'
                 : `${user?.department} Staff`}
