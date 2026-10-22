@@ -23,16 +23,18 @@
   flex-wrap: wrap;
 }
 
+/* ============ COMPACT BUTTONS ============ */
 .uw-btn-primary {
   background: #0d6efd;
   border: none;
   color: #fff;
-  padding: 10px 20px;
-  border-radius: 10px;
+  padding: 6px 12px; /* Decreased */
+  border-radius: 8px;
   font-weight: 600;
+  font-size: 0.82rem;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -46,17 +48,55 @@
   background: #fff;
   border: 1px solid #cbd5e1;
   color: #0a1f44;
-  padding: 10px 20px;
-  border-radius: 10px;
+  padding: 6px 12px; /* Decreased */
+  border-radius: 8px;
   font-weight: 500;
+  font-size: 0.82rem;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 .uw-btn-secondary:hover { background: #f1f5f9; }
 .uw-btn-secondary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ============ SHARE MENU ============ */
+.uw-share-wrap {
+  position: relative;
+  display: inline-block;
+}
+.uw-share-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #fff;
+  border: 1px solid #eaf0f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(10, 31, 68, 0.15);
+  z-index: 100;
+  min-width: 140px;
+  padding: 6px;
+  margin-top: 4px;
+}
+.uw-share-menu button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  text-align: left;
+  font-size: 0.82rem;
+  color: #0a1f44;
+  cursor: pointer;
+  border-radius: 6px;
+}
+.uw-share-menu button:hover {
+  background: #f4f7fb;
+  color: #0d6efd;
+}
 
 /* ============ PERIOD SELECTOR ============ */
 .uw-period-tabs {
@@ -81,10 +121,10 @@
   background: #f4f7fb;
   border: 1px solid #e5ecf6;
   color: #4a5568;
-  padding: 7px 14px;
+  padding: 6px 12px;
   border-radius: 20px;
   font-weight: 600;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -107,18 +147,18 @@
 /* ============ SUMMARY CARDS ============ */
 .uw-report-summary {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
   margin-bottom: 16px;
 }
 .uw-summary-card {
   background: #fff;
   border: 1px solid #e5ecf6;
-  border-radius: 12px;
-  padding: 14px 16px;
+  border-radius: 10px;
+  padding: 10px 12px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   box-shadow: 0 2px 10px rgba(10, 31, 68, 0.04);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -127,33 +167,31 @@
   box-shadow: 0 6px 18px rgba(10, 31, 68, 0.08);
 }
 .uw-summary-icon {
-  width: 42px;
-  height: 42px;
-  border-radius: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   flex-shrink: 0;
 }
 .uw-summary-icon.blue   { background: #0d6efd; }
 .uw-summary-icon.green  { background: #198754; }
 .uw-summary-icon.orange { background: #fd7e14; }
 .uw-summary-icon.red    { background: #dc3545; }
-
-/* 🆕 Purple variant (for Stock Flow "Net Change" card if you want it) */
 .uw-summary-icon.purple { background: #6f42c1; }
 
 .uw-summary-label {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   color: #6c7a92;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.3px;
 }
 .uw-summary-value {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 800;
   color: #0a1f44;
   line-height: 1.1;
@@ -170,14 +208,14 @@
 .uw-report-tab {
   background: #fff;
   border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  padding: 10px 18px;
+  border-radius: 8px;
+  padding: 8px 14px;
   color: #4a5568;
   font-weight: 600;
-  font-size: 0.88rem;
+  font-size: 0.82rem;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -189,9 +227,9 @@
 }
 .uw-tab-count {
   background: rgba(0, 0, 0, 0.1);
-  padding: 2px 8px;
+  padding: 2px 6px;
   border-radius: 12px;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
 }
 .uw-report-tab.active .uw-tab-count {
   background: rgba(255, 255, 255, 0.25);
@@ -207,17 +245,15 @@
   max-height: 60vh;
   margin-bottom: 20px;
 }
-
 .uw-excel-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.85rem;
 }
-
 .uw-excel-table thead th {
   background: #0a1f44;
   color: #fff;
-  padding: 12px 14px;
+  padding: 10px 12px;
   text-align: left;
   font-weight: 600;
   position: sticky;
@@ -227,16 +263,14 @@
   border-right: 1px solid rgba(255, 255, 255, 0.08);
 }
 .uw-excel-table thead th:last-child { border-right: none; }
-
 .uw-excel-table tbody td {
-  padding: 10px 14px;
+  padding: 8px 12px;
   border-bottom: 1px solid #f0f4fa;
   border-right: 1px solid #f0f4fa;
   color: #2d3b55;
   white-space: nowrap;
 }
 .uw-excel-table tbody td:last-child { border-right: none; }
-
 .uw-excel-table tbody tr:nth-child(even) { background: #f9fbff; }
 .uw-excel-table tbody tr:hover { background: #eef5ff; }
 
@@ -245,12 +279,76 @@
   color: #8898aa;
   padding: 30px;
 }
-
 .uw-loading {
   padding: 40px;
   text-align: center;
   color: #6c7a92;
   font-size: 0.95rem;
+}
+
+/* ============ 3-COLUMN GRID ============ */
+.uw-reports-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 24px;
+}
+@media (max-width: 1200px) {
+  .uw-reports-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Report Card Container */
+.uw-report-card {
+  background: #fff;
+  border: 1px solid #eaf0f9;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 10px rgba(10, 31, 68, 0.04);
+  display: flex;
+  flex-direction: column;
+}
+.uw-report-card h4 {
+  color: #0a1f44;
+  font-size: 0.95rem;
+  margin: 0 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.uw-report-card h4 i { color: #6f42c1; }
+
+/* Compact Form inside Card */
+.uw-form-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.uw-form-row > div {
+  flex: 1;
+  min-width: 100px;
+}
+.uw-form-row label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 4px;
+  display: block;
+}
+
+/* Action Buttons Row */
+.uw-card-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+.uw-card-actions button {
+  flex: 1;
+  justify-content: center;
 }
 
 /* ============ SCHEDULES ============ */
@@ -297,10 +395,7 @@
 .uw-schedule-badge.daily   { background: #e0f2fe; color: #0284c7; }
 .uw-schedule-badge.monthly { background: #f0e9ff; color: #6f42c1; }
 .uw-schedule-badge.annual  { background: #e6f7ec; color: #198754; }
-
-/* 🆕 Weekly badge (used by Stock Flow) */
 .uw-schedule-badge.weekly  { background: #fff1e0; color: #c2410c; }
-
 .uw-schedule-time {
   color: #0a1f44;
   font-weight: 700;
@@ -322,6 +417,8 @@
 }
 .uw-icon-btn.red { background: #ffe5e5; color: #dc3545; }
 .uw-icon-btn.red:hover { background: #dc3545; color: #fff; }
+.uw-icon-btn.purple { background: #f0e9ff; color: #6f42c1; }
+.uw-icon-btn.purple:hover { background: #6f42c1; color: #fff; }
 
 /* ============ MODAL ============ */
 .uw-modal-overlay {
@@ -356,7 +453,7 @@
   padding: 18px 22px;
   border-bottom: 1px solid #eaf0f9;
 }
-.uw-modal-head h4 { margin: 0; color: #0a1f44; font-weight: 700; }
+.uw-modal-head h4 { margin: 0; color: #0a1f44; font-weight: 700; font-size: 1.1rem; }
 .uw-modal-head h4 i { color: #6f42c1; margin-right: 8px; }
 .uw-modal-head button {
   background: transparent;
@@ -365,7 +462,7 @@
   color: #6c7a92;
   cursor: pointer;
 }
-.uw-modal-body { padding: 22px; }
+.uw-modal-body { padding: 22px; overflow-y: auto; }
 
 .uw-auto-q {
   font-size: 1rem;
@@ -383,7 +480,7 @@
   background: #fff;
   border: 2px solid #e5ecf6;
   border-radius: 10px;
-  padding: 16px 12px;
+  padding: 12px;
   color: #4a5568;
   font-weight: 700;
   cursor: pointer;
@@ -416,7 +513,6 @@
   gap: 6px;
 }
 .uw-auto-confirm strong { color: #0a1f44; }
-
 .uw-modal-actions {
   display: flex;
   justify-content: flex-end;
@@ -424,14 +520,16 @@
   margin-top: 22px;
 }
 
+/* Compact Inputs */
 .form-control {
   width: 100%;
-  padding: 10px 12px;
+  padding: 6px 10px;
   border: 1px solid #cbd5e1;
-  border-radius: 10px;
-  font-size: 0.95rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
   color: #0a1f44;
   background: #fff;
+  height: 34px;
 }
 .form-control:focus {
   outline: none;
@@ -440,49 +538,7 @@
 }
 
 /* Hidden by default; only shown when printing */
-.uw-print-header,
-.uw-print-footer {
-  display: none;
-}
-
-/* =========================================================
-   🆕 STOCK FLOW SPECIFIC STYLES
-   ========================================================= */
-
-/* Net change color helpers (used in the table cells) */
-.uw-net-positive {
-  background: #dcfce7 !important;
-  color: #166534 !important;
-  font-weight: 700;
-}
-.uw-net-negative {
-  background: #fee2e2 !important;
-  color: #991b1b !important;
-  font-weight: 700;
-}
-
-/* Small badges used inside the stock flow table */
-.uw-badge.green  { background: #dcfce7; color: #166534; }
-.uw-badge.orange { background: #ffedd5; color: #c2410c; }
-.uw-badge.red    { background: #fee2e2; color: #991b1b; }
-
-/* Purple accent used on some headers */
-.uw-btn-primary.uw-btn-accent { background: #6f42c1; }
-.uw-btn-primary.uw-btn-accent:hover { background: #4d2d8f; }
-
-/* Optional small "flow" arrow between summary cards (visual only) */
-.uw-flow-arrow {
-  display: none;
-}
-@media (min-width: 900px) {
-  .uw-flow-arrow {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #8898aa;
-    font-size: 1rem;
-  }
-}
+.uw-print-header, .uw-print-footer { display: none; }
 
 /* =========================================================
    PRINT STYLES
@@ -492,7 +548,6 @@
     size: A4 landscape;
     margin: 12mm 10mm 14mm 10mm;
   }
-
   html, body {
     background: #fff !important;
     margin: 0 !important;
@@ -500,16 +555,13 @@
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
-
   body > * { display: none !important; }
   body > #root { display: block !important; }
-
   #root > .uw-manager-layout,
   #root > .uw-staff-layout,
   #root > .uhome_home {
     display: block !important;
   }
-
   .uw-no-print,
   .uw-sidebar,
   .uw-navbar,
@@ -527,10 +579,10 @@
   .Toastify,
   .uw-toast-container,
   .uw-modal-overlay,
-  .uw-schedules {
+  .uw-schedules,
+  .uw-reports-grid {
     display: none !important;
   }
-
   .uw-manager-main,
   .uw-staff-main,
   .uw-manager-body,
@@ -542,14 +594,12 @@
     width: 100% !important;
     max-width: none !important;
   }
-
   .uw-rp {
     padding: 0 !important;
     margin: 0 !important;
     width: 100% !important;
     background: #fff !important;
   }
-
   .uw-print-header {
     display: flex !important;
     justify-content: space-between;
@@ -576,7 +626,6 @@
     font-size: 8.5pt;
     color: #6c7a92;
   }
-
   .uw-print-table-wrap,
   .uw-table-wrap {
     max-height: none !important;
@@ -586,7 +635,6 @@
     border-radius: 0 !important;
     display: block !important;
   }
-
   .uw-print-table,
   .uw-excel-table {
     width: 100% !important;
@@ -595,19 +643,15 @@
     font-size: 8pt !important;
     display: table !important;
   }
-
   .uw-print-table thead,
   .uw-excel-table thead { display: table-header-group !important; }
-
   .uw-print-table tbody,
   .uw-excel-table tbody { display: table-row-group !important; }
-
   .uw-print-table tr,
   .uw-excel-table tr {
     display: table-row !important;
     page-break-inside: avoid;
   }
-
   .uw-print-table thead th,
   .uw-excel-table thead th {
     background: #000 !important;
@@ -623,7 +667,6 @@
     print-color-adjust: exact !important;
     display: table-cell !important;
   }
-
   .uw-print-table tbody td,
   .uw-excel-table tbody td {
     border: 1px solid #666 !important;
@@ -636,7 +679,6 @@
     print-color-adjust: exact !important;
     display: table-cell !important;
   }
-
   .uw-print-table tbody tr:nth-child(even) td,
   .uw-excel-table tbody tr:nth-child(even) td {
     background: #f5f7fb !important;
@@ -645,17 +687,7 @@
   }
 }
 
-/* Purple icon button */
-.uw-icon-btn.purple {
-  background: #f0e9ff;
-  color: #6f42c1;
-}
-.uw-icon-btn.purple:hover {
-  background: #6f42c1;
-  color: #fff;
-}
-
-/* ============ DANGER MODAL (Delete confirmation) ============ */
+/* ============ DANGER MODAL ============ */
 .uw-modal-danger {
   max-width: 480px;
 }
@@ -669,9 +701,8 @@
 .uw-modal-head-danger h4 i {
   color: #dc3545;
 }
-
 .uw-confirm-q {
-  font-size: 0.98rem;
+  font-size: 0.95rem;
   color: #0a1f44;
   margin-bottom: 14px;
   line-height: 1.5;
@@ -704,26 +735,24 @@
   gap: 6px;
 }
 
-/* Danger button (Delete confirm) */
 .uw-btn-danger {
   background: #dc3545;
   border: none;
   color: #fff;
-  padding: 10px 20px;
-  border-radius: 10px;
+  padding: 6px 12px; /* Decreased */
+  border-radius: 8px;
   font-weight: 600;
+  font-size: 0.82rem;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 .uw-btn-danger:hover { background: #b02a37; }
 .uw-btn-danger:disabled { opacity: 0.6; cursor: not-allowed; }
 
-/* =========================================================
-   🆕 SPINNER (used by delete-confirm "Deleting…" state)
-   ========================================================= */
+/* Spinner */
 .uw-spin {
   animation: uw-spin-anim 1s linear infinite;
   display: inline-block;

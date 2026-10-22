@@ -124,6 +124,9 @@ export default function Reports() {
   const [deletingSchedule, setDeletingSchedule] = useState(false);
   const [schedules, setSchedules] = useState([]);
   const folderRef = useRef(null);
+  
+  /* Share Dropdown State */
+  const [shareMenuOpen, setShareMenuOpen] = useState(null);
 
   /* Department Flow */
   const [dfPeriod, setDfPeriod] = useState('monthly');
@@ -219,6 +222,22 @@ export default function Reports() {
         saved_to_pc: savedToPc ? 1 : 0, payload: payload || null,
       });
     } catch {}
+  };
+
+  /* Share Logic */
+  const handleShare = (type, section) => {
+    setShareMenuOpen(null);
+    const currentUrl = window.location.href;
+    const shareText = `Check out this ${section} Report from Urugo Woc LS.`;
+    
+    if (type === 'whatsapp') {
+      window.open(`https://wa.me/?text=${encodeURIComponent(shareText + ' ' + currentUrl)}`, '_blank');
+    } else if (type === 'email') {
+      window.location.href = `mailto:?subject=${encodeURIComponent(section + ' Report')}&body=${encodeURIComponent(shareText + '\n\n' + currentUrl)}`;
+    } else if (type === 'copy') {
+      navigator.clipboard.writeText(currentUrl);
+      showToast('Link copied to clipboard', 'success');
+    }
   };
 
   /* TAB: Excel/PDF/Print */
@@ -867,296 +886,214 @@ export default function Reports() {
         <span>{new Date().toLocaleDateString()}</span>
       </div>
 
-      {/* OPENING / CLOSING */}
-      <div className="uw-schedules uw-no-print" style={{ marginTop: 24 }}>
-        <h4 className="uw-schedules-title"><i className="bi bi-bar-chart-line"></i> Opening & Closing Stock Report</h4>
-        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'flex-end', marginBottom: 12 }}>
-          <div><label>Period</label>
-            <select className="form-control" value={ocPeriod} onChange={(e) => setOcPeriod(e.target.value)}>
-              <option value="daily">Daily</option>
-              <option value="monthly">Monthly</option>
-            </select></div>
-          {ocPeriod === 'daily' ? (
-            <div><label>Date</label>
-              <input type="date" className="form-control" value={ocDate} onChange={(e) => setOcDate(e.target.value)} /></div>
-          ) : (
-            <div><label>Month</label>
-              <input type="month" className="form-control" value={ocMonth} onChange={(e) => setOcMonth(e.target.value)} /></div>
-          )}
-          <button className="uw-btn-primary" onClick={loadOC} disabled={ocLoading}>
+      {/* 3-COLUMN GRID FOR REPORTS */}
+      <div className="uw-reports-grid uw-no-print">
+        
+        {/* OPENING / CLOSING */}
+        <div className="uw-report-card">
+          <h4><i className="bi bi-bar-chart-line"></i> Opening & Closing</h4>
+          <div className="uw-form-row">
+            <div>
+              <label>Period</label>
+              <select className="form-control" value={ocPeriod} onChange={(e) => setOcPeriod(e.target.value)}>
+                <option value="daily">Daily</option>
+                <option value="monthly">Monthly</option>
+              </select>
+            </div>
+            <div>
+              <label>{ocPeriod === 'daily' ? 'Date' : 'Month'}</label>
+              {ocPeriod === 'daily' ? (
+                <input type="date" className="form-control" value={ocDate} onChange={(e) => setOcDate(e.target.value)} />
+              ) : (
+                <input type="month" className="form-control" value={ocMonth} onChange={(e) => setOcMonth(e.target.value)} />
+              )}
+            </div>
+          </div>
+          <button className="uw-btn-primary" onClick={loadOC} disabled={ocLoading} style={{ width: '100%' }}>
             <i className="bi bi-search"></i> {ocLoading ? 'Loading…' : 'Generate'}
           </button>
+
+          {ocData && ocData.rows.length === 0 && (<p className="uw-no-data" style={{ marginTop: 12, fontSize: '0.8rem' }}>No movements.</p>)}
+
           {ocData && ocData.rows.length > 0 && (
-            <>
-              <button className="uw-btn-secondary" onClick={ocPrint}><i className="bi bi-printer"></i> Print</button>
-              <button className="uw-btn-secondary" onClick={ocExportPDF}><i className="bi bi-file-earmark-pdf"></i> PDF</button>
-              <button className="uw-btn-primary" onClick={ocExportExcel}><i className="bi bi-file-earmark-excel"></i> Excel</button>
-            </>
+            <div style={{ marginTop: 12 }}>
+              <div className="uw-card-actions">
+                <button className="uw-btn-secondary" onClick={ocPrint}><i className="bi bi-printer"></i> Print</button>
+                <button className="uw-btn-secondary" onClick={ocExportPDF}><i className="bi bi-file-earmark-pdf"></i> PDF</button>
+                <button className="uw-btn-primary" onClick={ocExportExcel}><i className="bi bi-file-earmark-excel"></i> Excel</button>
+                
+                {/* Share Button */}
+                <div className="uw-share-wrap">
+                  <button className="uw-btn-secondary" onClick={() => setShareMenuOpen(shareMenuOpen === 'oc' ? null : 'oc')}>
+                    <i className="bi bi-share"></i>
+                  </button>
+                  {shareMenuOpen === 'oc' && (
+                    <div className="uw-share-menu">
+                      <button onClick={() => handleShare('whatsapp', 'Opening & Closing')}><i className="bi bi-whatsapp" style={{ color: '#25D366' }}></i> WhatsApp</button>
+                      <button onClick={() => handleShare('email', 'Opening & Closing')}><i className="bi bi-envelope" style={{ color: '#EA4335' }}></i> Email</button>
+                      <button onClick={() => handleShare('copy', 'Opening & Closing')}><i className="bi bi-link-45deg"></i> Copy Link</button>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="uw-table-wrap" style={{ maxHeight: 220, overflow: 'auto', marginTop: 8 }}>
+                <table className="uw-excel-table" style={{ fontSize: '0.75rem' }}>
+                  <thead><tr>
+                    <th>Product</th>
+                    <th>Opening</th><th>Received</th><th>In</th><th>Out</th><th>Closing</th>
+                  </tr></thead>
+                  <tbody>
+                    {ocData.rows.map((r) => (
+                      <tr key={r.product_id}>
+                        <td className="uw-bold">{r.name}</td>
+                        <td>{r.opening_stock}</td>
+                        <td style={{ color: '#0a7c4a', fontWeight: 'bold' }}>{r.received_stock}</td>
+                        <td>{r.stock_in}</td><td>{r.stock_out}</td>
+                        <td className="uw-bold">{r.closing_stock}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           )}
         </div>
 
-        {ocData && ocData.rows.length === 0 && (<p className="uw-no-data">No stock movements for this period.</p>)}
-
-        {ocData && ocData.rows.length > 0 && (
-          <div className="uw-table-wrap" style={{ maxHeight: 360, overflow: 'auto' }}>
-            <table className="uw-excel-table">
-              <thead><tr>
-                <th>Product</th><th>Category</th><th>Unit</th>
-                <th>Opening</th><th>Received</th><th>In</th><th>Out</th><th>Losses</th>
-                <th>Closing</th><th>Price</th><th>Value</th>
-              </tr></thead>
-              <tbody>
-                {ocData.rows.map((r) => (
-                  <tr key={r.product_id}>
-                    <td className="uw-bold">{r.name}</td>
-                    <td>{r.category}</td><td>{r.unit}</td>
-                    <td>{r.opening_stock}</td>
-                    <td className="uw-bold" style={{ color: '#0a7c4a' }}>{r.received_stock}</td>
-                    <td>{r.stock_in}</td><td>{r.stock_out}</td><td>{r.losses}</td>
-                    <td className="uw-bold">{r.closing_stock}</td>
-                    <td>{Number(r.unit_price).toFixed(2)} {r.currency}</td>
-                    <td>{Number(r.closing_value).toFixed(2)}</td>
-                  </tr>
-                ))}
-              </tbody>
-              <tfoot><tr style={{ background: '#e6ecf5', fontWeight: 'bold' }}>
-                <td colSpan="3">TOTAL</td>
-                <td>{ocData.totals.opening}</td>
-                <td>{ocData.totals.received}</td>
-                <td>{ocData.totals.stockIn}</td><td>{ocData.totals.stockOut}</td>
-                <td>{ocData.totals.losses}</td><td>{ocData.totals.closing}</td>
-                <td></td><td>{ocData.totals.value.toFixed(2)}</td>
-              </tr></tfoot>
-            </table>
+        {/* DEPARTMENT FLOW */}
+        <div className="uw-report-card">
+          <h4><i className="bi bi-building"></i> Department Flow</h4>
+          <div className="uw-form-row">
+            <div style={{ flex: 2 }}>
+              <label>Department</label>
+              <select className="form-control" value={dfDept} onChange={(e) => setDfDept(e.target.value)}>
+                <option value="">— select —</option>
+                {dfDepts.map((d) => <option key={d} value={d}>{d}</option>)}
+              </select>
+            </div>
+            <div style={{ flex: 1 }}>
+              <label>Period</label>
+              <select className="form-control" value={dfPeriod} onChange={(e) => setDfPeriod(e.target.value)}>
+                {FLOW_PERIODS.map((p) => <option key={p.key} value={p.key}>{p.label}</option>)}
+              </select>
+            </div>
           </div>
-        )}
-      </div>
-
-      {/* DEPARTMENT FLOW */}
-      <div className="uw-schedules uw-no-print" style={{ marginTop: 24 }}>
-        <h4 className="uw-schedules-title"><i className="bi bi-building"></i> Department Stock Flow Report</h4>
-        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'flex-end', marginBottom: 12 }}>
-          <div><label>Department</label>
-            <select className="form-control" value={dfDept} onChange={(e) => setDfDept(e.target.value)} style={{ minWidth: 180 }}>
-              <option value="">— select —</option>
-              {dfDepts.map((d) => <option key={d} value={d}>{d}</option>)}
-            </select></div>
-          <div><label>Period</label>
-            <select className="form-control" value={dfPeriod} onChange={(e) => setDfPeriod(e.target.value)}>
-              {FLOW_PERIODS.map((p) => <option key={p.key} value={p.key}>{p.label}</option>)}
-            </select></div>
-          <button className="uw-btn-primary" onClick={loadDF} disabled={dfLoading}>
+          <button className="uw-btn-primary" onClick={loadDF} disabled={dfLoading} style={{ width: '100%' }}>
             <i className="bi bi-search"></i> {dfLoading ? 'Loading…' : 'Generate'}
           </button>
+
+          {dfData && dfData.rows.length === 0 && dfData.products.length === 0 && (<p className="uw-no-data" style={{ marginTop: 12, fontSize: '0.8rem' }}>No activity.</p>)}
+
           {dfData && (dfData.rows.length > 0 || dfData.products.length > 0) && (
-            <>
-              <button className="uw-btn-secondary" onClick={dfPrint}><i className="bi bi-printer"></i> Print</button>
-              <button className="uw-btn-secondary" onClick={dfExportPDF}><i className="bi bi-file-earmark-pdf"></i> PDF</button>
-              <button className="uw-btn-primary" onClick={dfExportExcel}><i className="bi bi-file-earmark-excel"></i> Excel</button>
-            </>
+            <div style={{ marginTop: 12 }}>
+              <div className="uw-card-actions">
+                <button className="uw-btn-secondary" onClick={dfPrint}><i className="bi bi-printer"></i> Print</button>
+                <button className="uw-btn-secondary" onClick={dfExportPDF}><i className="bi bi-file-earmark-pdf"></i> PDF</button>
+                <button className="uw-btn-primary" onClick={dfExportExcel}><i className="bi bi-file-earmark-excel"></i> Excel</button>
+                
+                {/* Share Button */}
+                <div className="uw-share-wrap">
+                  <button className="uw-btn-secondary" onClick={() => setShareMenuOpen(shareMenuOpen === 'df' ? null : 'df')}>
+                    <i className="bi bi-share"></i>
+                  </button>
+                  {shareMenuOpen === 'df' && (
+                    <div className="uw-share-menu">
+                      <button onClick={() => handleShare('whatsapp', 'Department Flow')}><i className="bi bi-whatsapp" style={{ color: '#25D366' }}></i> WhatsApp</button>
+                      <button onClick={() => handleShare('email', 'Department Flow')}><i className="bi bi-envelope" style={{ color: '#EA4335' }}></i> Email</button>
+                      <button onClick={() => handleShare('copy', 'Department Flow')}><i className="bi bi-link-45deg"></i> Copy Link</button>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {dfData.rows.length > 0 && (
+                <div className="uw-table-wrap" style={{ maxHeight: 180, overflow: 'auto', marginTop: 8 }}>
+                  <table className="uw-excel-table" style={{ fontSize: '0.75rem' }}>
+                    <thead><tr>
+                      <th>Period</th><th>Req</th><th>Rec</th><th>Iss</th><th>Used</th>
+                    </tr></thead>
+                    <tbody>
+                      {dfData.rows.map((r) => (
+                        <tr key={r.period}>
+                          <td className="uw-bold">{r.period}</td>
+                          <td>{r.requested}</td><td>{r.received}</td><td>{r.issued}</td><td>{r.used}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
           )}
         </div>
 
-        {dfData && dfData.rows.length === 0 && dfData.products.length === 0 && (<p className="uw-no-data">No activity for this department in the selected period.</p>)}
-
-        {dfData && dfData.rows.length > 0 && (
-          <>
-            <h5 style={{ marginTop: 8 }}>Timeline</h5>
-            <div className="uw-table-wrap" style={{ maxHeight: 280, overflow: 'auto' }}>
-              <table className="uw-excel-table">
-                <thead><tr>
-                  <th>Period</th><th>Requested</th><th>Received</th><th>Issued</th>
-                  <th>Used</th><th>Damaged</th><th>Remaining</th>
-                </tr></thead>
-                <tbody>
-                  {dfData.rows.map((r) => (
-                    <tr key={r.period}>
-                      <td className="uw-bold">{r.period}</td>
-                      <td>{r.requested}</td><td>{r.received}</td><td>{r.issued}</td>
-                      <td>{r.used}</td><td>{r.damaged}</td><td>{r.remaining}</td>
-                    </tr>
-                  ))}
-                </tbody>
-                <tfoot><tr style={{ background: '#e6ecf5', fontWeight: 'bold' }}>
-                  <td>TOTAL</td>
-                  <td>{dfData.totals.requested}</td><td>{dfData.totals.received}</td>
-                  <td>{dfData.totals.issued}</td><td>{dfData.totals.used}</td>
-                  <td>{dfData.totals.damaged}</td><td>{dfData.totals.remaining}</td>
-                </tr></tfoot>
-              </table>
+        {/* PER-PRODUCT */}
+        <div className="uw-report-card">
+          <h4><i className="bi bi-box"></i> Per-Product Report</h4>
+          <div className="uw-form-row">
+            <div style={{ flex: 2 }}>
+              <label>Product</label>
+              <select className="form-control" value={prProductId} onChange={(e) => setPrProductId(e.target.value)}>
+                <option value="">— select product —</option>
+                {(report.inventory || []).map((p) => (
+                  <option key={p.id} value={p.id}>{p.name}</option>
+                ))}
+              </select>
             </div>
-          </>
-        )}
-
-        {dfData && dfData.products.length > 0 && (
-          <>
-            <h5 style={{ marginTop: 16 }}>Breakdown by Product</h5>
-            <div className="uw-table-wrap" style={{ maxHeight: 280, overflow: 'auto' }}>
-              <table className="uw-excel-table">
-                <thead><tr>
-                  <th>Product</th><th>Unit</th>
-                  <th>Requested</th><th>Received</th><th>Issued</th>
-                  <th>Used</th><th>Damaged</th><th>Remaining</th>
-                </tr></thead>
-                <tbody>
-                  {dfData.products.map((p, i) => (
-                    <tr key={i}>
-                      <td className="uw-bold">{p.product_name}</td>
-                      <td>{p.product_unit}</td>
-                      <td>{p.requested}</td><td>{p.received}</td><td>{p.issued}</td>
-                      <td>{p.used}</td><td>{p.damaged}</td><td>{p.remaining}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div style={{ flex: 1 }}>
+              <label>Period</label>
+              <select className="form-control" value={prPeriod} onChange={(e) => setPrPeriod(e.target.value)}>
+                {FLOW_PERIODS.map((p) => <option key={p.key} value={p.key}>{p.label}</option>)}
+              </select>
             </div>
-          </>
-        )}
-      </div>
-
-      {/* PER-PRODUCT */}
-      <div className="uw-schedules uw-no-print" style={{ marginTop: 24 }}>
-        <h4 className="uw-schedules-title"><i className="bi bi-box"></i> Per-Product Report</h4>
-        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'flex-end', marginBottom: 12 }}>
-          <div><label>Product</label>
-            <select className="form-control" value={prProductId} onChange={(e) => setPrProductId(e.target.value)} style={{ minWidth: 220 }}>
-              <option value="">— select product —</option>
-              {(report.inventory || []).map((p) => (
-                <option key={p.id} value={p.id}>{p.name} ({p.unit})</option>
-              ))}
-            </select></div>
-          <div><label>Period</label>
-            <select className="form-control" value={prPeriod} onChange={(e) => setPrPeriod(e.target.value)}>
-              {FLOW_PERIODS.map((p) => <option key={p.key} value={p.key}>{p.label}</option>)}
-            </select></div>
-          <button className="uw-btn-primary" onClick={loadPR} disabled={prLoading}>
+          </div>
+          <button className="uw-btn-primary" onClick={loadPR} disabled={prLoading} style={{ width: '100%' }}>
             <i className="bi bi-search"></i> {prLoading ? 'Loading…' : 'Generate'}
           </button>
+
           {prData && (
-            <>
-              <button className="uw-btn-secondary" onClick={prPrint}><i className="bi bi-printer"></i> Print</button>
-              <button className="uw-btn-secondary" onClick={prExportPDF}><i className="bi bi-file-earmark-pdf"></i> PDF</button>
-              <button className="uw-btn-primary" onClick={prExportExcel}><i className="bi bi-file-earmark-excel"></i> Excel</button>
-            </>
-          )}
-        </div>
+            <div style={{ marginTop: 12 }}>
+              <div className="uw-card-actions">
+                <button className="uw-btn-secondary" onClick={prPrint}><i className="bi bi-printer"></i> Print</button>
+                <button className="uw-btn-secondary" onClick={prExportPDF}><i className="bi bi-file-earmark-pdf"></i> PDF</button>
+                <button className="uw-btn-primary" onClick={prExportExcel}><i className="bi bi-file-earmark-excel"></i> Excel</button>
+                
+                {/* Share Button */}
+                <div className="uw-share-wrap">
+                  <button className="uw-btn-secondary" onClick={() => setShareMenuOpen(shareMenuOpen === 'pr' ? null : 'pr')}>
+                    <i className="bi bi-share"></i>
+                  </button>
+                  {shareMenuOpen === 'pr' && (
+                    <div className="uw-share-menu">
+                      <button onClick={() => handleShare('whatsapp', 'Product')}><i className="bi bi-whatsapp" style={{ color: '#25D366' }}></i> WhatsApp</button>
+                      <button onClick={() => handleShare('email', 'Product')}><i className="bi bi-envelope" style={{ color: '#EA4335' }}></i> Email</button>
+                      <button onClick={() => handleShare('copy', 'Product')}><i className="bi bi-link-45deg"></i> Copy Link</button>
+                    </div>
+                  )}
+                </div>
+              </div>
 
-        {prData && (
-          <>
-            <div className="uw-report-summary" style={{ marginBottom: 12 }}>
-              <div className="uw-summary-card"><div className="uw-summary-icon blue"><i className="bi bi-box"></i></div>
-                <div><div className="uw-summary-label">Product</div>
-                  <div className="uw-summary-value" style={{ fontSize: 14 }}>{prData.product.name}</div></div></div>
-              <div className="uw-summary-card"><div className="uw-summary-icon green"><i className="bi bi-arrow-down-circle"></i></div>
-                <div><div className="uw-summary-label">Received</div>
-                  <div className="uw-summary-value">{prData.totals.received_stock}</div></div></div>
-              <div className="uw-summary-card"><div className="uw-summary-icon green"><i className="bi bi-box-arrow-in-down"></i></div>
-                <div><div className="uw-summary-label">Stock In</div>
-                  <div className="uw-summary-value">{prData.totals.stock_in}</div></div></div>
-              <div className="uw-summary-card"><div className="uw-summary-icon orange"><i className="bi bi-box-arrow-up"></i></div>
-                <div><div className="uw-summary-label">Stock Out</div>
-                  <div className="uw-summary-value">{prData.totals.stock_out}</div></div></div>
-              <div className="uw-summary-card"><div className="uw-summary-icon red"><i className="bi bi-exclamation-triangle"></i></div>
-                <div><div className="uw-summary-label">Losses</div>
-                  <div className="uw-summary-value">{prData.totals.losses}</div></div></div>
-              <div className="uw-summary-card"><div className="uw-summary-icon blue"><i className="bi bi-box-seam"></i></div>
-                <div><div className="uw-summary-label">Current Stock</div>
-                  <div className="uw-summary-value">{prData.product.quantity} {prData.product.unit}</div></div></div>
-            </div>
-
-            {prData.rows.length > 0 && (
-              <>
-                <h5>Timeline</h5>
-                <div className="uw-table-wrap" style={{ maxHeight: 240, overflow: 'auto' }}>
-                  <table className="uw-excel-table">
+              {prData.rows.length > 0 && (
+                <div className="uw-table-wrap" style={{ maxHeight: 180, overflow: 'auto', marginTop: 8 }}>
+                  <table className="uw-excel-table" style={{ fontSize: '0.75rem' }}>
                     <thead><tr>
-                      <th>Period</th><th>Received</th><th>Stock In</th><th>Stock Out</th>
-                      <th>Losses</th><th>Used</th><th>Damaged</th><th>Remaining</th>
+                      <th>Period</th><th>Rec</th><th>In</th><th>Out</th><th>Used</th>
                     </tr></thead>
                     <tbody>
                       {prData.rows.map((r) => (
                         <tr key={r.period}>
                           <td className="uw-bold">{r.period}</td>
-                          <td>{r.received_stock}</td><td>{r.stock_in}</td><td>{r.stock_out}</td>
-                          <td>{r.losses}</td><td>{r.used}</td><td>{r.damaged}</td><td>{r.remaining}</td>
+                          <td>{r.received_stock}</td><td>{r.stock_in}</td><td>{r.stock_out}</td><td>{r.used}</td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
-              </>
-            )}
+              )}
+            </div>
+          )}
+        </div>
 
-            {prData.details.stockIn && prData.details.stockIn.length > 0 && (
-              <>
-                <h5 style={{ marginTop: 16 }}>Stock In Details</h5>
-                <div className="uw-table-wrap" style={{ maxHeight: 220, overflow: 'auto' }}>
-                  <table className="uw-excel-table">
-                    <thead><tr><th>Date</th><th>Qty</th><th>Supplier</th><th>Batch</th><th>Expiry</th><th>Received By</th></tr></thead>
-                    <tbody>
-                      {prData.details.stockIn.map((r) => (
-                        <tr key={r.id}>
-                          <td>{new Date(r.created_at).toLocaleDateString()}</td>
-                          <td>{r.quantity}</td>
-                          <td>{r.donor_supplier || '—'}</td>
-                          <td>{r.batch_number || '—'}</td>
-                          <td>{r.expiry_date ? String(r.expiry_date).slice(0,10) : '—'}</td>
-                          <td>{r.received_by_name || '—'}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </>
-            )}
-
-            {prData.details.stockOut && prData.details.stockOut.length > 0 && (
-              <>
-                <h5 style={{ marginTop: 16 }}>Stock Out Details</h5>
-                <div className="uw-table-wrap" style={{ maxHeight: 220, overflow: 'auto' }}>
-                  <table className="uw-excel-table">
-                    <thead><tr><th>Date</th><th>Qty</th><th>Issued To</th><th>Dept</th><th>Received By</th><th>Approved By</th></tr></thead>
-                    <tbody>
-                      {prData.details.stockOut.map((r) => (
-                        <tr key={r.id}>
-                          <td>{new Date(r.created_at).toLocaleDateString()}</td>
-                          <td>{r.quantity}</td>
-                          <td>{r.issued_to || '—'}</td>
-                          <td>{r.department || '—'}</td>
-                          <td>{r.received_by_name || '—'}</td>
-                          <td>{r.approved_by_name || '—'}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </>
-            )}
-
-            {prData.details.usage && prData.details.usage.length > 0 && (
-              <>
-                <h5 style={{ marginTop: 16 }}>Usage Details</h5>
-                <div className="uw-table-wrap" style={{ maxHeight: 220, overflow: 'auto' }}>
-                  <table className="uw-excel-table">
-                    <thead><tr><th>Date</th><th>Staff</th><th>Dept</th><th>Used</th><th>Damaged</th><th>Remaining</th></tr></thead>
-                    <tbody>
-                      {prData.details.usage.map((r) => (
-                        <tr key={r.id}>
-                          <td>{new Date(r.created_at).toLocaleDateString()}</td>
-                          <td>{r.staff_name || '—'}</td>
-                          <td>{r.staff_department || '—'}</td>
-                          <td>{r.used_quantity}</td>
-                          <td>{r.damaged_quantity}</td>
-                          <td>{r.remaining_quantity}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </>
-            )}
-          </>
-        )}
       </div>
 
       {/* SCHEDULES */}
