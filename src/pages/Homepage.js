@@ -71,7 +71,7 @@ export default function Homepage() {
   const steps = [
     { num: 1, title: 'Staff Requests', desc: 'Staff submits a request with product, quantity, unit and reason.' },
     { num: 2, title: 'Stock Manager Forwards', desc: 'Stock Manager reviews, adjusts received quantity, forwards for review.' },
-    { num: 3, title: 'Main Manager Approves', desc: 'Main Manager approves or rejects with a comment — decision is logged.' },
+    { num: 3, title: 'Finance Manager Approves', desc: 'Finance Manager approves or rejects with a comment — decision is logged.' },
     { num: 4, title: 'Stock Manager Completes', desc: 'Stock is deducted and a Stock Out record is created automatically.' },
     { num: 5, title: 'Marked as Received', desc: 'Staff confirms pickup. Request moves to received status.' },
     { num: 6, title: 'Requisition + Usage', desc: 'Requisition form generated + staff reports used, damaged and remaining.' },
@@ -80,8 +80,8 @@ export default function Homepage() {
   const staffFlow = [
     { icon: 'bi-person-badge', title: '1. Staff Logs In', desc: 'Each staff member logs in with their email and department PIN.' },
     { icon: 'bi-send-check', title: '2. Submit Request(s)', desc: 'Choose products, quantity, requested unit and reason — submit one or many at once.' },
-    { icon: 'bi-clipboard-check', title: '3. Stock Manager Reviews', desc: 'Adjusts the received quantity and forwards the request to the Main Manager.' },
-    { icon: 'bi-patch-check-fill', title: '4. Main Manager Approves', desc: 'Approves or rejects with a comment — every action is logged.' },
+    { icon: 'bi-clipboard-check', title: '3. Stock Manager Reviews', desc: 'Adjusts the received quantity and forwards the request to the Stock Manager.' },
+    { icon: 'bi-patch-check-fill', title: '4. Finance Manager Approves', desc: 'Approves or rejects with a comment — every action is logged.' },
     { icon: 'bi-box-arrow-up', title: '5. Stock Issued', desc: 'Stock Manager completes the request — inventory and Stock Out updated.' },
     { icon: 'bi-file-earmark-text', title: '6. Requisition Form', desc: 'Printable / exportable requisition form generated for the received request.' },
   ];
@@ -108,7 +108,7 @@ export default function Homepage() {
       ],
     },
     {
-      icon: 'bi-shield-check', title: 'Main Manager', color: 'purple',
+      icon: 'bi-shield-check', title: 'Finance Manager', color: 'purple',
       points: [
         'Review every request independently',
         'Approve or reject with comments',
@@ -250,7 +250,7 @@ export default function Homepage() {
       <section className="uhome_section" data-reveal>
         <h2 className="uhome_section-title">Built for Every Role</h2>
         <p className="uhome_section-sub">
-          Staff, Stock Manager and Main Manager — each with a tailored dashboard
+          Staff, Stock Manager and Finance Manager — each with a tailored dashboard
         </p>
         <div className="uhome_roles-grid">
           {roles.map((r, i) => (
@@ -1082,8 +1082,8 @@ const SAMPLE_REQUEST = {
   reviewed_at: '2025-01-15T11:02:00Z',
   completed_at: '2025-01-15T14:40:00Z',
   received_at: '2025-01-15T15:12:00Z',
-  reviewer_name: 'Main Manager',
-  approved_by_name: 'Main Manager',
+  reviewer_name: 'Finance Manager',
+  approved_by_name: 'Finance Manager or Stock Manager',
   completed_by_name: 'Stock Manager',
   received_by_name: 'Joe',
 };
