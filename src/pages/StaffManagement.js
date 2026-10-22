@@ -36,11 +36,11 @@ export default function StaffManagement() {
 
   // Role options Stock Manager can assign
   const canAssignRoles =
-    user?.role === 'main_manager'
+    user?.role === 'finance_manager'
       ? [
           { value: 'staff', label: 'Staff' },
           { value: 'manager', label: 'Stock Manager' },
-          { value: 'main_manager', label: 'Main Manager' },
+          { value: 'finance_manager', label: 'Main Manager' },
         ]
       : [
           { value: 'staff', label: 'Staff' },
@@ -83,7 +83,7 @@ export default function StaffManagement() {
 
   const openEdit = (s) => {
     // Defensive: Stock Manager cannot edit a Main Manager
-    if (user?.role !== 'main_manager' && s.role === 'main_manager') {
+    if (user?.role !== 'finance_manager' && s.role === 'finance_manager') {
       showToast('You cannot edit a Main Manager', 'error');
       return;
     }
@@ -111,7 +111,7 @@ export default function StaffManagement() {
 
   const remove = async (id, role) => {
     // Defensive: Stock Manager cannot delete a Main Manager
-    if (user?.role !== 'main_manager' && role === 'main_manager') {
+    if (user?.role !== 'finance_manager' && role === 'finance_manager') {
       showToast('You cannot delete a Main Manager', 'error');
       return;
     }
@@ -132,13 +132,13 @@ export default function StaffManagement() {
   );
 
   const roleBadge = (role) => {
-    if (role === 'main_manager') return 'uw-badge purple';
+    if (role === 'finance_manager') return 'uw-badge purple';
     if (role === 'manager') return 'uw-badge green';
     return 'uw-badge';
   };
 
   const roleLabel = (role) => {
-    if (role === 'main_manager') return 'Main Manager';
+    if (role === 'finance_manager') return 'Main Manager';
     if (role === 'manager') return 'Stock Manager';
     return 'Staff';
   };

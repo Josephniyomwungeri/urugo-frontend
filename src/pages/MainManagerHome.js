@@ -11,7 +11,7 @@ export default function MainManagerHome() {
   const load = async () => {
     try {
       const [overview, stats] = await Promise.all([
-        axios.get(`${API_URL}/main-manager/overview`),
+        axios.get(`${API_URL}/finance-manager/overview`),
         axios.get(`${API_URL}/dashboard/stats`),
       ]);
       setData({ ...overview.data, stats: stats.data });
@@ -34,7 +34,7 @@ export default function MainManagerHome() {
 
       {/* KPI Cards */}
       <div className="uw-mmh-grid">
-        <div className="uw-mmh-card purple" onClick={() => navigate('/main-manager/reviews')}>
+        <div className="uw-mmh-card purple" onClick={() => navigate('/finance-manager/reviews')}>
           <i className="bi bi-clipboard-check"></i>
           <div className="uw-mmh-value">{data.pendingReviews}</div>
           <div className="uw-mmh-label">Pending Reviews</div>
@@ -70,7 +70,7 @@ export default function MainManagerHome() {
       <div className="uw-mmh-section">
         <div className="uw-mmh-section-head">
           <h5><i className="bi bi-clipboard-check"></i> Requests Awaiting Review</h5>
-          <button className="uw-btn-primary" onClick={() => navigate('/main-manager/reviews')}>
+          <button className="uw-btn-primary" onClick={() => navigate('/finance-manager/reviews')}>
             View All <i className="bi bi-arrow-right"></i>
           </button>
         </div>
@@ -100,7 +100,7 @@ export default function MainManagerHome() {
                     <td>{r.product_name}</td>
                     <td><strong>{r.quantity}</strong> {r.unit}</td>
                     <td>
-                      <button className="uw-icon-btn purple" onClick={() => navigate('/main-manager/reviews')}>
+                      <button className="uw-icon-btn purple" onClick={() => navigate('/finance-manager/reviews')}>
                         <i className="bi bi-eye-fill"></i> Review
                       </button>
                     </td>

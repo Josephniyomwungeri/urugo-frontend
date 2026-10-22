@@ -16,12 +16,12 @@ export default function MainManagerDashboard() {
   const { user } = useAuth();
 
   const navItems = [
-    { to: '/main-manager', label: 'Overview', icon: 'bi-speedometer2', end: true },
-    { to: '/main-manager/reviews', label: 'Pending Reviews', icon: 'bi-clipboard-check' },
-    { to: '/main-manager/inventory', label: 'Inventory', icon: 'bi-box-seam' },
-    { to: '/main-manager/usage', label: 'Usage Reports', icon: 'bi-clipboard-data' },
-    { to: '/main-manager/reports', label: 'Reports', icon: 'bi-file-earmark-bar-graph' },
-    { to: '/main-manager/stock-flow', label: 'Stock Flow', icon: 'bi-graph-up-arrow' },
+    { to: '/finance-manager', label: 'Overview', icon: 'bi-speedometer2', end: true },
+    { to: '/finance-manager/reviews', label: 'Pending Reviews', icon: 'bi-clipboard-check' },
+    { to: '/finance-manager/inventory', label: 'Inventory', icon: 'bi-box-seam' },
+    { to: '/finance-manager/usage', label: 'Usage Reports', icon: 'bi-clipboard-data' },
+    { to: '/finance-manager/reports', label: 'Reports', icon: 'bi-file-earmark-bar-graph' },
+    { to: '/finance-manager/stock-flow', label: 'Stock Flow', icon: 'bi-graph-up-arrow' },
   ];
 
   return (

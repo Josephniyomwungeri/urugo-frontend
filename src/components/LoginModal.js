@@ -82,7 +82,7 @@ export default function LoginModal({ show, onClose }) {
       // 3. Navigate after a short delay to let auth state commit
       const role = res.data.user.role;
       const target =
-        role === 'main_manager' ? '/main-manager' :
+        role === 'finance_manager' ? '/finance-manager' :
         role === 'manager'      ? '/manager'      :
                                   '/staff';
 

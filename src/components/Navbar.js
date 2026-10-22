@@ -51,7 +51,7 @@ export default function Navbar({ onMenuClick }) {
           <div>
             <div className="uw-user-name">{user?.full_name}</div>
             <div className="uw-user-role">
-              {user?.role === 'main_manager'
+              {user?.role === 'finance_manager'
                 ? 'Main Manager'
                 : user?.role === 'manager'
                 ? 'Stock Manager'

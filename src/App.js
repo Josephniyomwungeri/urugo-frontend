@@ -30,9 +30,9 @@ function AppRoutes() {
       />
 
       <Route
-        path="/main-manager/*"
+        path="/finance-manager/*"
         element={
-          <ProtectedRoute roleRequired="main_manager">
+          <ProtectedRoute roleRequired="finance_manager">
             <MainManagerDashboard />
           </ProtectedRoute>
         }
