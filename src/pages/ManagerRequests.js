@@ -84,14 +84,14 @@ export default function ManagerRequests() {
     try {
       await axios.put(`${API_URL}/requests/${id}/status`, { status, manager_notes: notes });
       const messages = {
-        pending_review: 'Sent to Main Manager for review',
+        pending_review: 'Sent to Finance Manager for review',
         rejected: 'Request rejected',
         completed: 'Request completed & stock issued',
         received: 'Request marked as received',
         approved: canReviewDirectly
           ? 'Request approved directly'
-          : 'Sent to Main Manager for review',
-        reviewed: canReviewDirectly ? 'Request approved directly' : 'Sent to Main Manager for review',
+          : 'Sent to Finance Manager for review',
+        reviewed: canReviewDirectly ? 'Request approved directly' : 'Sent to Finance Manager for review',
       };
       showToast(messages[status] || `Request ${status}`, 'success');
       setSelected(null);
@@ -160,6 +160,32 @@ export default function ManagerRequests() {
     }
     return true;
   });
+
+  /* ===== 🆕 Group requests by batch_id for requisition forms ===== */
+  const requestsByBatch = useMemo(() => {
+    const map = new Map();
+    requests.forEach((r) => {
+      const key = r.batch_id || `single-${r.id}`;
+      if (!map.has(key)) map.set(key, []);
+      map.get(key).push(r);
+    });
+    return map;
+  }, [requests]);
+
+  const getBatchFor = (r) => {
+    if (!r.batch_id) return [r];
+    return requestsByBatch.get(r.batch_id) || [r];
+  };
+
+  const openRequisition = (r) => {
+    const batch = getBatchFor(r);
+    // Prefer only the received items within that batch
+    const receivedItems = batch.filter((x) => x.status === 'received');
+    setRequisitionFor({
+      primary: r,
+      items: receivedItems.length ? receivedItems : batch,
+    });
+  };
 
   const statusBadge = (s) => {
     const map = {
@@ -257,8 +283,8 @@ export default function ManagerRequests() {
       >
         <i className={canReviewDirectly ? 'bi bi-shield-check' : 'bi bi-shield-lock'}></i>{' '}
         {canReviewDirectly
-          ? 'Direct Review Permission: GRANTED — You can approve, reject, and complete requests without sending them to the Main Manager.'
-          : 'Direct Review Permission: RESTRICTED — Requests must be sent to the Main Manager for review before you can complete them.'}
+          ? 'Direct Review Permission: GRANTED — You can approve, reject, and complete requests without sending them to the Finance Manager.'
+          : 'Direct Review Permission: RESTRICTED — Requests must be sent to the Finance Manager for review before you can complete them.'}
       </div>
 
       {/* ===== Search + Department filter row ===== */}
@@ -314,9 +340,26 @@ export default function ManagerRequests() {
               const isNew = !!r.is_new_product;
               const pendingInventory = canRecordInventory(r);
 
+              // 🆕 Batch badge info
+              const batchSize = r.batch_id
+                ? (requestsByBatch.get(r.batch_id) || []).length
+                : 1;
+              const isBatch = batchSize > 1;
+
               return (
                 <tr key={r.id}>
-                  <td>{r.id}</td>
+                  <td>
+                    {r.id}
+                    {isBatch && (
+                      <span
+                        className="uw-badge purple"
+                        style={{ marginLeft: 6, fontSize: '0.65rem' }}
+                        title={`Part of a batch of ${batchSize} requests`}
+                      >
+                        <i className="bi bi-collection"></i> {batchSize}
+                      </span>
+                    )}
+                  </td>
                   <td>{new Date(r.created_at).toLocaleString()}</td>
                   <td className="uw-bold">{r.staff_name}</td>
                   <td><span className="uw-badge">{r.staff_department}</span></td>
@@ -387,7 +430,6 @@ export default function ManagerRequests() {
                     {/* ===== PENDING actions ===== */}
                     {r.status === 'pending' && (
                       <>
-                        {/* Direct approve when permission is granted */}
                         {canReviewDirectly && (
                           <button
                             className="uw-icon-btn green"
@@ -407,11 +449,11 @@ export default function ManagerRequests() {
                           className="uw-icon-btn purple"
                           title={
                             canReviewDirectly
-                              ? 'Send to Main Manager for review anyway'
-                              : 'Send to Main Manager for Review'
+                              ? 'Send to Finance Manager for review anyway'
+                              : 'Send to Finance Manager for Review'
                           }
                           onClick={() =>
-                            updateStatus(r.id, 'pending_review', 'Forwarded to Main Manager')
+                            updateStatus(r.id, 'pending_review', 'Forwarded to Finance Manager')
                           }
                         >
                           <i className="bi bi-send-check"></i>
@@ -426,7 +468,6 @@ export default function ManagerRequests() {
                       </>
                     )}
 
-                    {/* Record-as-inventory button */}
                     {pendingInventory && (
                       <button
                         className="uw-icon-btn orange"
@@ -437,7 +478,6 @@ export default function ManagerRequests() {
                       </button>
                     )}
 
-                    {/* Complete when reviewed (works both with and without permission) */}
                     {r.status === 'reviewed' && !pendingInventory && (
                       <button
                         className="uw-icon-btn green"
@@ -448,7 +488,6 @@ export default function ManagerRequests() {
                       </button>
                     )}
 
-                    {/* ✅ NEW: Complete directly from pending when permission is granted */}
                     {canReviewDirectly && r.status === 'pending' && !r.is_new_product && (
                       <button
                         className="uw-icon-btn green"
@@ -492,21 +531,36 @@ export default function ManagerRequests() {
                         <i className="bi bi-check2-circle"></i> Received
                       </button>
                     )}
+
+                    {/* 🆕 Batched requisition button */}
                     {r.status === 'received' && r.product_id && (
                       <button
                         className="uw-icon-btn purple"
-                        title="Open Requisition Form"
-                        onClick={() => setRequisitionFor(r)}
+                        title={
+                          isBatch
+                            ? `Open combined Requisition Form (${batchSize} items)`
+                            : 'Open Requisition Form'
+                        }
+                        onClick={() => openRequisition(r)}
                       >
                         <i className="bi bi-file-earmark-text"></i> Requisition
+                        {isBatch && (
+                          <span
+                            className="uw-badge"
+                            style={{ marginLeft: 6, fontSize: '0.65rem' }}
+                          >
+                            {batchSize}
+                          </span>
+                        )}
                       </button>
                     )}
+
                     <button
                       className="uw-icon-btn blue"
                       title="Details"
                       onClick={() => openDetails(r)}
                     >
-                      <i className="bi bi-eye-fill"></i>
+                      <i className="bi bi-eye-fill"></i> Details
                     </button>
                   </td>
                 </tr>
@@ -573,7 +627,7 @@ export default function ManagerRequests() {
               )}
               {selected.reviewer_notes && (
                 <div className="uw-detail-row">
-                  <strong>Main Manager Notes:</strong> {selected.reviewer_notes}
+                  <strong>Finance Manager Notes:</strong> {selected.reviewer_notes}
                 </div>
               )}
 
@@ -597,7 +651,6 @@ export default function ManagerRequests() {
                 </>
               )}
 
-              {/* ===== Modal action buttons ===== */}
               {selected.status === 'pending' && (
                 <div className="uw-modal-actions" style={{ flexWrap: 'wrap', gap: 8 }}>
                   {canReviewDirectly && (
@@ -622,9 +675,9 @@ export default function ManagerRequests() {
                   </button>
                   <button
                     className="uw-btn-primary"
-                    onClick={() => updateStatus(selected.id, 'pending_review', 'Forwarded to Main Manager')}
+                    onClick={() => updateStatus(selected.id, 'pending_review', 'Forwarded to Finance Manager')}
                   >
-                    <i className="bi bi-send-check"></i> Send to Main Manager
+                    <i className="bi bi-send-check"></i> Send to Finance Manager
                   </button>
                 </div>
               )}
@@ -680,9 +733,15 @@ export default function ManagerRequests() {
                 <div className="uw-modal-actions">
                   <button
                     className="uw-btn-primary"
-                    onClick={() => { setRequisitionFor(selected); setSelected(null); }}
+                    onClick={() => { openRequisition(selected); setSelected(null); }}
                   >
                     <i className="bi bi-file-earmark-text"></i> Open Requisition Form
+                    {selected.batch_id &&
+                      (requestsByBatch.get(selected.batch_id) || []).length > 1 && (
+                        <span className="uw-badge" style={{ marginLeft: 6 }}>
+                          {(requestsByBatch.get(selected.batch_id) || []).length} items
+                        </span>
+                      )}
                   </button>
                 </div>
               )}
@@ -821,10 +880,11 @@ export default function ManagerRequests() {
         </div>
       )}
 
-      {/* ===== Requisition Form modal ===== */}
+      {/* ===== Requisition Form modal (batch-aware) ===== */}
       {requisitionFor && (
         <RequisitionForm
-          request={requisitionFor}
+          request={requisitionFor.primary}
+          batchRequests={requisitionFor.items}
           onClose={() => setRequisitionFor(null)}
         />
       )}

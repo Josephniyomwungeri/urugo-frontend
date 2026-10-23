@@ -79,15 +79,12 @@ export default function StaffRequests() {
   // 🚀 Check for preselected items from the Product Catalog
   useEffect(() => {
     const stored = localStorage.getItem('uw_bulk_request_ids');
-    
-    // Only run if: we have stored IDs, products are fully loaded, and we haven't opened it yet
+
     if (stored && products.length > 0 && !hasOpenedBulk.current) {
       try {
         const ids = JSON.parse(stored);
         if (Array.isArray(ids) && ids.length > 0) {
-          
           const selectedProducts = products.filter(p => ids.includes(p.id));
-          
           if (selectedProducts.length > 0) {
             const forms = selectedProducts.map(p => ({
               ...emptyRequest,
@@ -97,17 +94,16 @@ export default function StaffRequests() {
             }));
             setBulkForms(forms);
             setShowBulkModal(true);
-            hasOpenedBulk.current = true; // Prevent re-opening
+            hasOpenedBulk.current = true;
           }
         }
       } catch (err) {
         console.error('Failed to parse selected IDs', err);
       } finally {
-        // Clear local storage so it doesn't trigger again on refresh
         localStorage.removeItem('uw_bulk_request_ids');
       }
     }
-  }, [products]); // Re-run when products array updates
+  }, [products]);
 
   const openNewRequest = () => {
     setForm({
@@ -127,12 +123,10 @@ export default function StaffRequests() {
     });
   };
 
-  // 🆕 toggle between existing / new product
   const toggleNewProduct = (isNew) => {
     setForm((f) => ({
       ...f,
       is_new_product: isNew,
-      // when switching to new, clear product_id; when switching back, keep old
       product_id: isNew ? '' : (products[0]?.id || ''),
       requested_unit: isNew
         ? (f.new_product_unit || 'pieces')
@@ -143,7 +137,6 @@ export default function StaffRequests() {
 
   const submit = async (e) => {
     e.preventDefault();
-    // Client-side validation
     if (form.is_new_product && !form.new_product_name.trim()) {
       showToast('Please enter the new product name', 'warning');
       return;
@@ -462,6 +455,31 @@ export default function StaffRequests() {
     });
   }, [requests, statusFilter, search]);
 
+  /* ===== 🆕 Group requests by batch_id for requisition forms ===== */
+  const requestsByBatch = useMemo(() => {
+    const map = new Map();
+    requests.forEach((r) => {
+      const key = r.batch_id || `single-${r.id}`;
+      if (!map.has(key)) map.set(key, []);
+      map.get(key).push(r);
+    });
+    return map;
+  }, [requests]);
+
+  const getBatchFor = (r) => {
+    if (!r.batch_id) return [r];
+    return requestsByBatch.get(r.batch_id) || [r];
+  };
+
+  const openRequisition = (r) => {
+    const batch = getBatchFor(r);
+    const receivedItems = batch.filter((x) => x.status === 'received');
+    setRequisitionFor({
+      primary: r,
+      items: receivedItems.length ? receivedItems : batch,
+    });
+  };
+
   return (
     <div className="uw-sr">
       <div className="uw-page-header">
@@ -536,9 +554,27 @@ export default function StaffRequests() {
               const changed = received !== r.quantity;
               const isNew = !!r.is_new_product;
               const notYetInInventory = isNew && !r.product_id;
+
+              // 🆕 batch info
+              const batchSize = r.batch_id
+                ? (requestsByBatch.get(r.batch_id) || []).length
+                : 1;
+              const isBatch = batchSize > 1;
+
               return (
                 <tr key={r.id}>
-                  <td>{r.id}</td>
+                  <td>
+                    {r.id}
+                    {isBatch && (
+                      <span
+                        className="uw-badge purple"
+                        style={{ marginLeft: 6, fontSize: '0.65rem' }}
+                        title={`Part of a batch of ${batchSize} requests`}
+                      >
+                        <i className="bi bi-collection"></i> {batchSize}
+                      </span>
+                    )}
+                  </td>
                   <td>{new Date(r.created_at).toLocaleString()}</td>
                   <td className="uw-bold">
                     {r.product_name}
@@ -573,10 +609,22 @@ export default function StaffRequests() {
                       <>
                         <button
                           className="uw-icon-btn purple"
-                          onClick={() => setRequisitionFor(r)}
-                          title="Open Requisition Form"
+                          onClick={() => openRequisition(r)}
+                          title={
+                            isBatch
+                              ? `Open combined Requisition Form (${batchSize} items)`
+                              : 'Open Requisition Form'
+                          }
                         >
                           <i className="bi bi-file-earmark-text"></i> Requisition
+                          {isBatch && (
+                            <span
+                              className="uw-badge"
+                              style={{ marginLeft: 6, fontSize: '0.65rem' }}
+                            >
+                              {batchSize}
+                            </span>
+                          )}
                         </button>
                         <button
                           className="uw-icon-btn green"
@@ -702,7 +750,6 @@ export default function StaffRequests() {
                       </button>
                     </div>
 
-                    {/* Toggle: Existing vs New */}
                     <div className="uw-toggle-row">
                       <button
                         type="button"
@@ -823,8 +870,7 @@ export default function StaffRequests() {
                 <i className="bi bi-info-circle-fill"></i>{' '}
                 {usageForm.isEdit ? (
                   <>
-                    You already reported usage. You can only increase Used or Damaged
-                    (min used: {usageForm.original_used}, min damaged: {usageForm.original_damaged}).
+                    You already reported usage. You can only increase Used or Damaged                    (min used: {usageForm.original_used}, min damaged: {usageForm.original_damaged}).
                   </>
                 ) : (
                   <>
@@ -895,7 +941,7 @@ export default function StaffRequests() {
         </div>
       )}
 
-      {/* ============ SINGLE REQUEST MODAL (legacy — now with new-product toggle) ============ */}
+      {/* ============ SINGLE REQUEST MODAL ============ */}
       {showModal && (
         <div className="uw-modal-overlay" onClick={() => setShowModal(false)}>
           <div className="uw-modal" onClick={(e) => e.stopPropagation()} style={{ maxWidth: 500 }}>
@@ -1008,10 +1054,11 @@ export default function StaffRequests() {
         </div>
       )}
 
-      {/* ============ REQUISITION FORM MODAL ============ */}
+      {/* ============ REQUISITION FORM MODAL (batch-aware) ============ */}
       {requisitionFor && (
         <RequisitionForm
-          request={requisitionFor}
+          request={requisitionFor.primary}
+          batchRequests={requisitionFor.items}
           onClose={() => setRequisitionFor(null)}
         />
       )}

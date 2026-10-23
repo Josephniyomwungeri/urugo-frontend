@@ -1,22 +1,38 @@
-import React, { useRef } from 'react';
+import React, { useRef, useMemo } from 'react';
 import jsPDF from 'jspdf';
 import './RequisitionForm.css';
 
 /**
  * Requisition Form Modal
  * Props:
- *   request   – the request object with names + timestamps
- *   onClose   – callback to close
+ *   request        – single request object (legacy / single view)
+ *   batchRequests  – array of all requests belonging to the same batch
+ *                    (when provided, overrides `request` for the items table)
+ *   onClose        – callback to close
  */
-export default function RequisitionForm({ request, onClose }) {
+export default function RequisitionForm({ request, batchRequests, onClose }) {
   const printRef = useRef(null);
 
-  if (!request) return null;
+  // ===== Normalize to an array of items =====
+  const items = useMemo(() => {
+    if (Array.isArray(batchRequests) && batchRequests.length > 0) return batchRequests;
+    if (request) return [request];
+    return [];
+  }, [request, batchRequests]);
+
+  if (items.length === 0) return null;
+
+  const primary = items[0];
+  const isBatch = items.length > 1;
 
   // ===== Auto-generate Ref No =====
-  const department = request.staff_department || request.department || 'General';
+  const department =
+    primary.staff_department || primary.department || 'General';
   const deptPrefix = department.replace(/\s+/g, '').slice(0, 4).toUpperCase();
-  const refNo = `REQ-${deptPrefix}-${String(request.id).padStart(5, '0')}`;
+
+  const refNo = isBatch
+    ? `REQ-${deptPrefix}-${String(primary.batch_id || primary.id).slice(0, 8).toUpperCase()}`
+    : `REQ-${deptPrefix}-${String(primary.id).padStart(5, '0')}`;
 
   // ===== Date helpers =====
   const fmtDate = (d) => {
@@ -41,26 +57,32 @@ export default function RequisitionForm({ request, onClose }) {
     } catch { return '—'; }
   };
 
-  const createdStr = fmtDate(request.created_at);
-  const approvedStr = fmtDate(request.reviewed_at);
-  const completedStr = fmtDate(request.completed_at);
-  const receivedStr = fmtDate(request.received_at);
-  const createdFullStr = fmtDateTime(request.created_at);
+  const createdStr = fmtDate(primary.created_at);
+  const approvedStr = fmtDate(primary.reviewed_at);
+  const completedStr = fmtDate(primary.completed_at);
+  const receivedStr = fmtDate(primary.received_at);
+  const createdFullStr = fmtDateTime(primary.created_at);
 
-  // ===== Quantities =====
-  const requestedQty = request.quantity;
-  const receivedQty =
-    request.received_quantity != null ? request.received_quantity : request.quantity;
-  const unit = request.requested_unit || request.product_unit || request.unit || '';
+  // ===== Names (taken from primary, they should all match in a batch) =====
+  const requesterName = primary.staff_name || '—';
+  const approverName =
+    primary.approved_by_name || primary.reviewer_name || '—';
+  const deliveredName =
+    primary.completed_by_name || primary.stock_manager_name || '—';
+  const receiverName = primary.received_by_name || primary.staff_name || '—';
 
-  // ===== Requisition Reason =====
-  const requisitionReason = request.reason || '—';
-
-  // ===== Names =====
-  const requesterName = request.staff_name || '—';
-  const approverName = request.approved_by_name || request.reviewer_name || '—';
-  const deliveredName = request.completed_by_name || request.stock_manager_name || '—';
-  const receiverName = request.received_by_name || request.staff_name || '—';
+  // ===== Totals =====
+  const totals = items.reduce(
+    (acc, r) => {
+      const qty = Number(r.quantity) || 0;
+      const rec =
+        r.received_quantity != null ? Number(r.received_quantity) : qty;
+      acc.requested += qty;
+      acc.received += rec;
+      return acc;
+    },
+    { requested: 0, received: 0 }
+  );
 
   // =====================================================
   // Print via browser
@@ -112,62 +134,119 @@ export default function RequisitionForm({ request, onClose }) {
   };
 
   // =====================================================
-  // Export as PDF
+  // Export as PDF (auto-paginates)
   // =====================================================
   const handleExportPDF = () => {
     const doc = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4' });
     const pageW = doc.internal.pageSize.getWidth();
+    const pageH = doc.internal.pageSize.getHeight();
     let y = 40;
 
-    try { doc.addImage('/urugo-logo.png', 'PNG', pageW / 2 - 30, y, 60, 60); } catch { /* ignore */ }
-    y += 72;
+    const drawHeader = () => {
+      try {
+        doc.addImage('/urugo-logo.png', 'PNG', pageW / 2 - 30, y, 60, 60);
+      } catch { /* ignore */ }
+      y += 72;
 
-    doc.setFontSize(16);
-    doc.setFont('helvetica', 'bold');
-    doc.text('URUGO WOMEN OPPORTUNITY CENTER, LLC', pageW / 2, y, { align: 'center' });
-    y += 18;
-    doc.setFontSize(13);
-    doc.text('GOOD REQUISITION FORM', pageW / 2, y, { align: 'center' });
-    y += 30;
+      doc.setFontSize(16);
+      doc.setFont('helvetica', 'bold');
+      doc.text('URUGO WOMEN OPPORTUNITY CENTER, LLC', pageW / 2, y, {
+        align: 'center',
+      });
+      y += 18;
+      doc.setFontSize(13);
+      doc.text('GOOD REQUISITION FORM', pageW / 2, y, { align: 'center' });
+      y += 30;
 
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'normal');
-    doc.text(`LOCATION: Kayonza-Urugo Woc`, 40, y);
-    doc.text(`REF NO: ${refNo}`, pageW - 40, y, { align: 'right' });
-    y += 16;
-    doc.text(`STAFF: ${requesterName}`, 40, y);
-    doc.text(`DATE: ${createdStr}`, pageW - 40, y, { align: 'right' });
-    y += 22;
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`LOCATION: Kayonza-Urugo Woc`, 40, y);
+      doc.text(`REF NO: ${refNo}`, pageW - 40, y, { align: 'right' });
+      y += 16;
+      doc.text(`STAFF: ${requesterName}`, 40, y);
+      doc.text(`DATE: ${createdStr}`, pageW - 40, y, { align: 'right' });
+      y += 22;
+    };
 
-    // ✅ New column layout — added Requisition Reason after Qty Received
-    const colX = [40, 75, 260, 340, 430, 500];
+    const drawTableHeader = () => {
+      doc.setFillColor(10, 31, 68);
+      doc.setTextColor(255, 255, 255);
+      doc.rect(40, y, pageW - 80, 22, 'F');
+      doc.text('NO', 50, y + 15);
+      doc.text('Item Name', 81, y + 15);
+      doc.text('Quantity', 266, y + 15);
+      doc.text('Qty Received', 346, y + 15);
+      doc.text('Requisition Reason', 436, y + 15);
+      y += 22;
+      doc.setTextColor(0, 0, 0);
+    };
 
-    doc.setFillColor(10, 31, 68);
-    doc.setTextColor(255, 255, 255);
+    drawHeader();
+    drawTableHeader();
+
+    // ---- Rows ----
+    items.forEach((r, i) => {
+      // estimate reason height (wrap)
+      const reasonText = String(r.reason || '—');
+      const lines = doc.splitTextToSize(reasonText, 120);
+      const rowH = Math.max(22, 14 + lines.length * 12);
+
+      // page break if needed
+      if (y + rowH > pageH - 120) {
+        doc.addPage();
+        y = 40;
+        drawHeader();
+        drawTableHeader();
+      }
+
+      doc.rect(40, y, pageW - 80, rowH);
+      const qty = Number(r.quantity) || 0;
+      const rec =
+        r.received_quantity != null ? Number(r.received_quantity) : qty;
+      const unit = r.requested_unit || r.product_unit || r.unit || '';
+
+      doc.text(String(i + 1), 50, y + 15);
+      doc.text(
+        String(r.product_name || '').slice(0, 30),
+        81,
+        y + 15
+      );
+      doc.text(`${qty} ${unit}`, 266, y + 15);
+      doc.text(`${rec} ${unit}`, 346, y + 15);
+      doc.text(lines, 436, y + 15);
+
+      // vertical separators
+      [75, 260, 340, 430, 500].forEach((x) =>
+        doc.line(x, y, x, y + rowH)
+      );
+
+      y += rowH;
+    });
+
+    // Totals
+    if (y + 22 > pageH - 120) {
+      doc.addPage();
+      y = 40;
+      drawHeader();
+      drawTableHeader();
+    }
+    doc.setFillColor(242, 245, 251);
     doc.rect(40, y, pageW - 80, 22, 'F');
-    doc.text('NO', colX[0] + 10, y + 15);
-    doc.text('Item Name', colX[1] + 6, y + 15);
-    doc.text('Quantity', colX[2] + 6, y + 15);
-    doc.text('Qty Received', colX[3] + 6, y + 15);
-    doc.text('Requisition Reason', colX[4] + 6, y + 15);
-    y += 22;
-
-    doc.setTextColor(0, 0, 0);
     doc.rect(40, y, pageW - 80, 22);
-    doc.text('1', colX[0] + 12, y + 15);
-    doc.text(String(request.product_name || '').slice(0, 28), colX[1] + 6, y + 15);
-    doc.text(`${requestedQty} ${unit}`, colX[2] + 6, y + 15);
-    doc.text(`${receivedQty} ${unit}`, colX[3] + 6, y + 15);
-    doc.text(String(requisitionReason).slice(0, 30), colX[4] + 6, y + 15);
-    y += 22;
+    doc.setFont('helvetica', 'bold');
+    doc.text('TOTAL', 240, y + 15, { align: 'right' });
+    doc.text(String(totals.requested), 266, y + 15);
+    doc.text(String(totals.received), 346, y + 15);
+    doc.setFont('helvetica', 'normal');
+    [75, 260, 340, 430, 500].forEach((x) => doc.line(x, y, x, y + 22));
+    y += 22 + 40;
 
-    // Draw vertical column lines
-    [colX[1], colX[2], colX[3], colX[4], colX[5]].forEach((x) => doc.line(x, y - 44, x, y));
-    doc.rect(40, y - 44, pageW - 80, 44);
+    // === Signatures ===
+    if (y + 120 > pageH - 40) {
+      doc.addPage();
+      y = 60;
+    }
 
-    y += 40;
-
-    // === Signatures with names + dates ===
     doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
     doc.text('Order Requested by:', 40, y);
@@ -220,11 +299,24 @@ export default function RequisitionForm({ request, onClose }) {
     doc.save(`Requisition_${refNo}.pdf`);
   };
 
+  // =====================================================
+  // Render
+  // =====================================================
   return (
     <div className="rf-overlay" onClick={onClose}>
       <div className="rf-modal" onClick={(e) => e.stopPropagation()}>
         <div className="rf-modal-head">
-          <h4><i className="bi bi-file-earmark-text"></i> Requisition Form — {refNo}</h4>
+          <h4>
+            <i className="bi bi-file-earmark-text"></i> Requisition Form — {refNo}
+            {isBatch && (
+              <span
+                className="uw-badge purple"
+                style={{ marginLeft: 10, fontSize: '0.7rem' }}
+              >
+                {items.length} items
+              </span>
+            )}
+          </h4>
           <button onClick={onClose}><i className="bi bi-x-lg"></i></button>
         </div>
 
@@ -251,35 +343,40 @@ export default function RequisitionForm({ request, onClose }) {
               <thead>
                 <tr>
                   <th style={{ width: '40px' }}>NO</th>
-                  <th style={{ width: '90px' }}>Item Name</th>
-                  <th style={{ width: '40px' }}>Quantity</th>
-                  <th style={{ width: '45px' }}>Qty Received</th>
-                  <th style={{ width: '140px' }}>Requisition Reason</th>
+                  <th style={{ width: '160px' }}>Item Name</th>
+                  <th style={{ width: '70px' }}>Quantity</th>
+                  <th style={{ width: '80px' }}>Qty Received</th>
+                  <th>Requisition Reason</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>{request.product_name}</td>
-                  <td>{requestedQty} {unit}</td>
-                  <td>{receivedQty} {unit}</td>
-                  <td>{requisitionReason}</td>
-                </tr>
-                {[2, 3, 4, 5].map((n) => (
-                  <tr key={n}>
-                    <td>{n}</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-                  </tr>
-                ))}
+                {items.map((r, i) => {
+                  const qty = Number(r.quantity) || 0;
+                  const rec =
+                    r.received_quantity != null
+                      ? Number(r.received_quantity)
+                      : qty;
+                  const unit =
+                    r.requested_unit || r.product_unit || r.unit || '';
+                  return (
+                    <tr key={r.id}>
+                      <td>{i + 1}</td>
+                      <td>{r.product_name || '—'}</td>
+                      <td>{qty} {unit}</td>
+                      <td>{rec} {unit}</td>
+                      <td>{r.reason || '—'}</td>
+                    </tr>
+                  );
+                })}
                 <tr className="rf-total-row">
                   <td colSpan="2" style={{ textAlign: 'right' }}>TOTAL</td>
-                  <td>{requestedQty} {unit}</td>
-                  <td>{receivedQty} {unit}</td>
+                  <td>{totals.requested}</td>
+                  <td>{totals.received}</td>
                   <td>&nbsp;</td>
                 </tr>
               </tbody>
             </table>
 
-            {/* ===== Signatures with names + dates ===== */}
             <div className="rf-signatures">
               <div className="rf-sig-block">
                 <div className="rf-sig-line">
@@ -312,7 +409,11 @@ export default function RequisitionForm({ request, onClose }) {
             </div>
 
             <div className="rf-footer">
-              Generated by Urugo Woc Logistic System • Request #{request.id} • {createdFullStr}
+              Generated by Urugo Woc Logistic System •{' '}
+              {isBatch
+                ? `Batch ${refNo} • ${items.length} item(s)`
+                : `Request #${primary.id}`}{' '}
+              • {createdFullStr}
             </div>
           </div>
         </div>
