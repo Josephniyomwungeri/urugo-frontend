@@ -915,10 +915,11 @@ export default function Reports() {
                     {ocData.rows.map((r) => (
                       <tr key={r.product_id}>
                         <td className="uw-bold">{r.name}</td>
-                        <td>{Number(r.unit_price).toFixed(2)} {r.currency}</td>
+                        
                         <td>{r.opening_stock}</td>
                         <td style={{ color: '#0a7c4a', fontWeight: 'bold' }}>{r.received_stock}</td>
                         <td>{r.stock_in}</td><td>{r.stock_out}</td>
+                        <td>{Number(r.unit_price).toFixed(2)} {r.currency}</td>
                         <td className="uw-bold">{r.closing_stock}</td>
                       </tr>
                     ))}
