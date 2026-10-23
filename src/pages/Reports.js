@@ -908,8 +908,8 @@ export default function Reports() {
                 <table className="uw-excel-table" style={{ fontSize: '0.75rem' }}>
                   <thead><tr>
                     <th>Product</th>
-                    <th>Unit Price</th>
-                    <th>Opening</th><th>Received</th><th>In</th><th>Out</th><th>Closing</th>
+                   
+                    <th>Opening</th><th>Received</th><th>In</th><th>Out</th> <th>Unit Price</th><th>Closing</th>
                   </tr></thead>
                   <tbody>
                     {ocData.rows.map((r) => (
